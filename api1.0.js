@@ -475,7 +475,7 @@ if (plugCubed !== undefined) plugCubed.close();
             p3Utils.chatLog(undefined, p3Lang.i18n('running', version) + '</span><br /><span class="chat-text" style="color:#66FFFF">' + p3Lang.i18n('commandsHelp'), this.colors.infoMessage1);
 
             window.addEventListener('pushState', this.proxy.onRoomJoin);
-            $('body').prepend('<link rel="stylesheet" type="text/css" id="swag-css" href="https://raw2.github.com/xSidewinderx/swagapi/master/swag.css" />');
+            $('body').prepend('<link rel="stylesheet" type="text/css" id="plugcubed-css" href="https://d1rfegul30378.cloudfront.net/alpha/plugCubed.css" />');
             $('#plug-dj').after(menuButton);
             menuButton.click(this.proxy.onMenuClick);
             $('#room-bar').css('left', 108);
@@ -647,13 +647,13 @@ if (plugCubed !== undefined) plugCubed.close();
                 Context.off('chat:receive', onChatReceived);
                 volume.remove();
 
-                $('#swag-css,#font-awesome,#plugcubed-js-extra,#side-right,#side-left,#notify-dialog,.plugcubed-footer,#plug-cubed,#p3-settings,#p3-settings-custom-colors,.p3-s-stream,.p3-s-clear,#waitlist .user .afkTimer').remove();
+                $('#plugcubed-css,#font-awesome,#plugcubed-js-extra,#side-right,#side-left,#notify-dialog,.plugcubed-footer,#plug-cubed,#p3-settings,#p3-settings-custom-colors,.p3-s-stream,.p3-s-clear,#waitlist .user .afkTimer').remove();
                 $('#room-bar').css('left', 54);
                 if (this.customColorsStyle)
                     this.customColorsStyle.remove();
                 if (socket) {
                     socket.onclose = function() {
-                        console.log('[plug³ Socket Server]', 'Closed');
+                        console.log('[plugÂ³ Socket Server]', 'Closed');
                     };
                     socket.close();
                 }
@@ -681,13 +681,13 @@ if (plugCubed !== undefined) plugCubed.close();
                 if (socket !== undefined && socket.readyState === SockJS.OPEN) return;
                 socket = new SockJS('http://socket.plugcubed.net/gateway');
                 socket.tries = 0;
-                console.log('[plug³ Socket Server]', socketReconnecting ? 'Reconnecting' : 'Connecting');
+                console.log('[plugÂ³ Socket Server]', socketReconnecting ? 'Reconnecting' : 'Connecting');
                 /**
                  * @this {SockJS}
                  */
                 socket.onopen = function() {
                     this.tries = 0;
-                    console.log('[plug³ Socket Server]', socketReconnecting ? 'Reconnected' : 'Connected');
+                    console.log('[plugÂ³ Socket Server]', socketReconnecting ? 'Reconnected' : 'Connected');
                     var userData = API.getUser();
                     this.send(JSON.stringify({
                         type: 'userdata',
@@ -739,7 +739,7 @@ if (plugCubed !== undefined) plugCubed.close();
                  * @this {SockJS}
                  */
                 socket.onclose = function() {
-                    console.log('[plug³ Socket Server]', 'Closed');
+                    console.log('[plugÂ³ Socket Server]', 'Closed');
                     this.tries++;
                     socketReconnecting = true;
 
