@@ -339,14 +339,10 @@
       data.voteLog[u.id] = {};
     }
   };
-initialize = function() {
-    pupOnline();
-    populateUserData();
-    initEnvironment();
-    initHooks();
-    data.startup();
-    data.newSong();
-    return data.startAfkInterval();
+
+  initEnvironment = function() {
+    document.getElementById("button-vote-positive").click();
+    return document.getElementById("button-sound").click();
   };
 
   afkCheck = function() {
@@ -1721,7 +1717,5 @@ initialize = function() {
     }
     return _results;
   };
-
-  initialize();
 
 }).call(this);
