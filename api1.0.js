@@ -339,13 +339,7 @@
       data.voteLog[u.id] = {};
     }
   };
-
-  initEnvironment = function() {
-    document.getElementById("button-vote-positive").click();
-    return document.getElementById("button-sound").click();
-  };
-
-  initialize = function() {
+initialize = function() {
     pupOnline();
     populateUserData();
     initEnvironment();
