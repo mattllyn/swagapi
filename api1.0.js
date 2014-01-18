@@ -327,7 +327,7 @@
   })();
 
   pupOnline = function() {
-    return API.sendChat("Bot Online!");
+    return API.sendChat("Test response! Ignore");
   };
 
   populateUserData = function() {
@@ -343,6 +343,16 @@
   initEnvironment = function() {
     document.getElementById("button-vote-positive").click();
     return document.getElementById("button-sound").click();
+  };
+
+  initialize = function() {
+    pupOnline();
+    populateUserData();
+    initEnvironment();
+    initHooks();
+    data.startup();
+    data.newSong();
+    return data.startAfkInterval();
   };
 
   afkCheck = function() {
@@ -778,7 +788,7 @@
 
     wootCommand.prototype.functionality = function() {
       var msg, nameIndex;
-      msg = "Please WOOT on DJ Booth and support your fellow DJs! AutoWoot: http://bit.ly/Lwcis0";
+      msg = "Please WOOT on DJ Booth and support your fellow DJs!";
       if ((nameIndex = this.msgData.message.indexOf('@')) !== -1) {
         return API.sendChat(this.msgData.message.substr(nameIndex) + ', ' + msg);
       } else {
@@ -1717,5 +1727,7 @@
     }
     return _results;
   };
+
+  initialize();
 
 }).call(this);
