@@ -327,7 +327,7 @@
   })();
 
   pupOnline = function() {
-    return API.sendChat("Bot test response, please Ignore.");
+    return API.sendChat("@" + user.getUser().username + ", I haven't seen you chat or vote in at least 12 minutes. Are you AFK?  If you don't show activity in 2 minutes I will remove you."));
   };
 
   populateUserData = function() {
