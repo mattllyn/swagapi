@@ -342,6 +342,7 @@
 
   initEnvironment = function() {
     document.getElementById("button-vote-positive").click();
+    return document.getElementById("button-sound").click();
   };
 
   initialize = function() {
@@ -1600,7 +1601,7 @@
     if (data.currentsong === null) {
       data.newSong();
     } else {
-      API.sendChat("/em: Just played " + data.currentsong.title + " by " + data.currentsong.author + ". Stats: Woots: " + data.currentwoots + ", Mehs: " + data.currentmehs + ", Loves: " + data.currentcurates + ".");
+      API.sendChat("/em: obj.media.author + " - " + obj.media.title");
       data.newSong();
       document.getElementById("button-vote-positive").click();
     }
