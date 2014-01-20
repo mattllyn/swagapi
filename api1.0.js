@@ -327,7 +327,7 @@
   })();
 
   pupOnline = function() {
-    return API.sendChat("Test response! Ignore");
+    return API.sendChat("Bot test response, please Ignore.);
   };
 
   populateUserData = function() {
