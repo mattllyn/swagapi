@@ -787,15 +787,16 @@ case "votes":
                         break;
 
                     case "lockskip":
-                        if( API.getUser(data.fromID).permission > 1){
-                            API.moderateRoomProps(true, true);
-                            swagbot.misc.lockSkipping = true;
-                            swagbot.misc.lockSkipped = API.getDJs()[0].id;
-                            setTimeout(function(){ API.moderateRemoveDJ(swagbot.misc.lockSkipped); }, 500);
-                        }else{
-                            API.sendChat("This command requires bouncer or higher!");
-                        }
-                        break;
+                     if(API.getUser(data.fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
+                     API.moderateLockWaitList(true);
+                     API.moderateForceSkip();
+            setTimeout(function(){
+              API.moderateLockWaitList(false);
+            }, 650);
+          }else{
+            API.sendChat("This command requires Admins only!");
+          }
+          break;
                     case 'rvf':
                     case 'removedfilter':
                         if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1) swagbot.settings.removedFilter ? API.sendChat("Removed video filter is enabled") : API.sendChat("Removed video is disabled");
