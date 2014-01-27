@@ -680,9 +680,9 @@ case "votes":
                 break;
             }
           }
-          if(Countrybot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-            Countrybot.misc.ready = false;
-            setTimeout(function(){ Countrybot.misc.ready = true; }, Countrybot.settings.cooldown * 1000);
+          if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+            swagbot.misc.ready = false;
+            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
           break;
           break;
@@ -1249,9 +1249,9 @@ case "votes":
                 break;
             }
           }
-          if(Countrybot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-            Countrybot.misc.ready = false;
-            setTimeout(function(){ Countrybot.misc.ready = true; }, Countrybot.settings.cooldown * 1000);
+          if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+            swagbot.misc.ready = false;
+            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
                     case "cookie":
                         if(typeof command[1] == "undefined"){
