@@ -1,792 +1,1231 @@
-(function () {
-    var f, voteSkipCommand, Command, RoomHelper, User, afkCheck, afksCommand, announceCurate, antispam, apiHooks, beggar, chatCommandDispatcher, chatUniversals, cmds, commandsCommand, data, dieCommand, handleNewSong, handleUserJoin, handleUserLeave, andleVote, hook, initEnvironment, initHooks, initialize, msToStr, populateUserData, pupOnline, settings, skipCommand, undoHooks, unhook, updateVotes, voteRatioCommand, _refBotTancuj, _ref, _ref1, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _autowoot, _ref16, _ref17, _votekickCommand, _ref19, _ref2, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _ref26, _ref27, _ref28, _ref29, _ref3, _ref30, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9, __bind = function (a, b) {
-            return function () {
-                return a.apply(b, arguments)
-            }
-        }, __indexOf = [].indexOf || function (a) {
-            for (var i = 0, l = this.length; i < l; i++) {
-                if (i in this && this[i] === a) return i
-            }
-            return -1
-        }, __hasProp = {}.hasOwnProperty,
-        __extends = function (a, b) {
-            for (var c in b) {
-                if (__hasProp.call(b, c)) a[c] = b[c]
-            }
+var killerBot = {};
+var ruleSkip = {};
 
-            function ctor() {
-                this.constructor = a
-            }
-            ctor.prototype = b.prototype;
-            a.prototype = new ctor();
-            a.__super__ = b.prototype;
-            return a
-        };
-    settings = (function () {
-        function settings() {
-            this.implode = __bind(this.implode, this);
-            this.intervalMessages = __bind(this.intervalMessages, this);
-            this.startAfkInterval = __bind(this.startAfkInterval, this);
-            this.setInternalWaitlist = __bind(this.setInternalWaitlist, this);
-            this.userJoin = __bind(this.userJoin, this);
-            this.getRoomUrlPath = __bind(this.getRoomUrlPath, this);
-            this.startup = __bind(this.startup, this)
-        }
-        settings.prototype.currentsong = {};
-        settings.prototype.users = {};
-        settings.prototype.djs = [];
-        settings.prototype.mods = [];
-        settings.prototype.host = [];
-        settings.prototype.hasWarned = false;
-        settings.prototype.currentwoots = 0;
-        settings.prototype.currentmehs = 0;
-        settings.prototype.currentcurates = 0;
-        settings.prototype.roomUrlPath = null;
-        settings.prototype.skipVotes = 0;
-        settings.prototype.internalWaitlist = [];
-        settings.prototype.userDisconnectLog = [];
-        settings.prototype.voteLog = {};
-        settings.prototype.seshOn = false;
-        settings.prototype.forceSkip = false;
-        settings.prototype.seshMembers = [];
-        settings.prototype.launchTime = null;
-        settings.prototype.totalVotingData = {
-            woots: 0,
-            mehs: 0,
-            curates: 0
-        };
-        settings.prototype.pupScriptUrl = 'http://autowoot.itoffice.sk/bots/easy/easybot.js';
-        settings.prototype.afkTime = 12 * 60 * 1000;
-        settings.prototype.songIntervalMessages = [{
-            interval: 10,
-            offset: 0,
-            msg: 'Hello I\'m the Bot. Ask our serverteam.'
-        }];
-        settings.prototype.songCount = 0;
-        settings.prototype.startup = function () {
-            this.launchTime = new Date();
-            return this.roomUrlPath = this.getRoomUrlPath()
-        };
-        settings.prototype.getRoomUrlPath = function () {
-            return window.location.pathname.replace(/\//g, '')
-        };
-        settings.prototype.newSong = function () {
-            this.totalVotingData.woots += data.currentwoots;
-            this.totalVotingData.mehs += data.currentmehs;
-            this.totalVotingData.curates += data.currentcurates;
-            this.setInternalWaitlist();
-            this.currentsong = API.getMedia();
-            if (this.currentsong !== null) {
-                return this.currentsong
-            } else {
-                return false
-            }
-        };
-        settings.prototype.userJoin = function (u) {
-            var a, _ref;
-            a = Object.keys(this.users);
-            if (_ref = u.id && __indexOf.call(a, _ref) >= 0) {
-                return this.users[u.id].inRoom(true)
-            } else {
-                this.users[u.id] = new User(u);
-                return this.voteLog[u.id] = {}
-            }
-        };
-        settings.prototype.setInternalWaitlist = function () {
-            var a, fullWaitList, lineWaitList;
-            a = ['' + API.getDJ() + ''];
-            lineWaitList = API.getWaitList();
-            fullWaitList = a.concat(lineWaitList);
-            return this.internalWaitlist = fullWaitList
-        };
-        settings.prototype.activity = function (a) {
-            if (a.type === 'message') {
-                return this.users[a.fromID].updateActivity()
-            }
-        };
-        settings.prototype.startAfkInterval = function () {
-            return this.afkInterval = setInterval(afkCheck, 2000)
-        };
-        settings.prototype.intervalMessages = function () {
-            var a, _i, _len, _ref, _results;
-            this.songCount++;
-            _ref = this.songIntervalMessages;
-            _results = [];
-            for (_i = 0; _i < _ref.length; _i++) {
-                a = _ref[_i];
-                if (((this.songCount + a['offset']) % a['interval']) === 0) {
-                    _results.push(API.sendChat(a['msg']))
-                } else {
-                    _results.push(void 0)
-                }
-            }
-            return _results
-        };
-        settings.prototype.implode = function () {
-            var a, val;
-            for (a in this) {
-                val = this[a];
-                if (typeof this[a] === 'object') {
-                    delete this[a]
-                }
-            }
-            return clearInterval(this.afkInterval)
-        };
-        settings.prototype.lockBooth = function (a) {
-            if (a == null) {
-                a = null
-            }
-            return $.ajax({
-                url: "http://plug.dj/_/gateway/room.update_options",
-                type: 'POST',
-                data: JSON.stringify({
-                    service: "room.update_options",
-                    body: [this.roomUrlPath, {
-                        "boothLocked": true,
-                        "waitListEnabled": true,
-                        "maxPlays": 1,
-                        "maxDJs": 5
-                    }]
-                }),
-                async: this.async,
-                dataType: 'json',
-                contentType: 'application/json'
-            }).done(function () {
-                if (a != null) {
-                    return a()
-                }
-            })
-        };
-        settings.prototype.unlockBooth = function (a) {
-            if (a == null) {
-                a = null
-            }
-            return $.ajax({
-                url: "http://plug.dj/_/gateway/room.update_options",
-                type: 'POST',
-                data: JSON.stringify({
-                    service: "room.update_options",
-                    body: [this.roomUrlPath, {
-                        "boothLocked": false,
-                        "waitListEnabled": true,
-                        "maxPlays": 1,
-                        "maxDJs": 5
-                    }]
-                }),
-                async: this.async,
-                dataType: 'json',
-                contentType: 'application/json'
-            }).done(function () {
-                if (a != null) {
-                    return a()
-                }
-            })
-        };
-        return settings
-    })();
-    data = new settings();
-    User = (function () {
-        User.prototype.afkWarningCount = 0;
-        User.prototype.lastWarning = null;
-        User.prototype["protected"] = false;
-        User.prototype.isInRoom = true;
+killerBot.misc = {};
+killerBot.settings = {};
+killerBot.moderators = {};
+killerBot.filters = {};
+botMethods = {};
+killerBot.pubVars = {};
 
-        function User(a) {
-            this.user = a;
-            this.updateVote = __bind(this.updateVote, this);
-            this.inRoom = __bind(this.inRoom, this);
-            this.notDj = __bind(this.notDj, this);
-            this.warn = __bind(this.warn, this);
-            this.getIsDj = __bind(this.getIsDj, this);
-            this.getWarningCount = __bind(this.getWarningCount, this);
-            this.getUser = __bind(this.getUser, this);
-            this.getLastWarning = __bind(this.getLastWarning, this);
-            this.getLastActivity = __bind(this.getLastActivity, this);
-            this.updateActivity = __bind(this.updateActivity, this);
-            this.init = __bind(this.init, this);
-            this.init()
+toSave = {};
+toSave.settings = killerBot.settings;
+toSave.moderators = killerBot.moderators;
+toSave.ruleSkip = ruleSkip;
+
+killerBot.misc.version = "1.0";
+killerBot.misc.origin = "This bot was created by Sidewinder.";
+killerBot.misc.changelog = "Info1";
+killerBot.misc.ready = true;
+killerBot.misc.lockSkipping = false;
+killerBot.misc.lockSkipped = "0";
+killerBot.misc.tacos = new Array();
+
+joined = new Date().getTime();
+
+cancel = false;
+
+killerBot.filters.swearWords = new Array();
+killerBot.filters.racistWords = new Array();
+killerBot.filters.beggerWords = new Array();
+
+killerBot.settings.maxLength = 10; //minutes
+killerBot.settings.cooldown = 10; //seconds
+killerBot.settings.staffMeansAccess = true;
+killerBot.settings.historyFilter = true;
+killerBot.settings.swearFilter = true;
+killerBot.settings.racismFilter = true;
+killerBot.settings.beggerFilter = true;
+killerBot.settings.interactive = true;
+killerBot.settings.ruleSkip = true;
+killerBot.settings.removedFilter = true;
+
+
+//                          Side                 Side                       
+killerBot.admins = ["52d363bdc3b97a416d5c837f", "52d363bdc3b97a416d5c837f"];
+
+killerBot.filters.swearWords = ["slut","mofo","penis","penus",":b:itch","fuck","shit","bitch","cunt","twat","faggot","queer","dumb ass","pussy","dick","cocksucker","asshole","vagina","tit","mangina","tits","cock","jerk","puta","puto","cum","sperm","ass-hat","ass-jabber","assbanger","assfuck","assfucker","assnigger","butt plug","bollox","blowJob","Blow job","bampot","cameltoe","chode","clitfuck","cunt","dildo","douche","doochbag","dike","dyke","fatass","fat ass","fuckass","fuckbag","fuckboy","fuckbrain","gay","gaylord","handjob","hoe","Jizz","jerk off","kunt","lesbian","lesbo","lezzie","minge","munging","nut sack","nutsack","queer","queef","rimjob","scrote","schlong","titfuck","twat","unclefucker","va-j-j","vajayjay","vjayjay","wankjob","whore"];
+
+killerBot.filters.racistWords = ["nigger","kike","spick","porchmonkey","camel jockey","towelhead","towel head","chink","gook","porch monkey","Coolie","nigga","nigguh","black shit","black monkey","you ape","you monkey","you gorilla","black ass","assnigger","honkey","White bread","white ass","jungle bunny","niglet","nigaboo","paki","ruski","sand nigger","sandnigger","wetback","wet back"];
+
+killerBot.filters.beggerWords = ["fanme","fan me","fan4fan","fan 4 fan","fan pls","fans please","need fan","more fan","fan back","give me fans","gimme fans"];
+
+var blockedSongs = [
+    "Rick Roll",
+    "GANGNAM",
+    "The Fox",
+    "The Fox [Official music video HD]",
+    "10 hour"
+];
+ 
+var blockedArtists = [
+    "Rick Astley",
+    "Miley Cyrus",
+    "Justin bieber",
+    "Rebbeca black",
+    "2pac",
+    "Drake",
+    "2 Chainz",
+    "2Chainz",
+    "Canuco Zumby",
+];
+
+
+killerBot.misc.tacos = ["crispy taco","mexican taco","vegetarian taco","spicy taco","meatlover taco","cheese taco","wet hamburger","taco shell","delicious taco","gross taco"];
+
+killerBot.pubVars.skipOnExceed;
+killerBot.pubVars.command = false;
+
+Array.prototype.remove=function(){var c,f=arguments,d=f.length,e;while(d&&this.length){c=f[--d];while((e=this.indexOf(c))!==-1){this.splice(e,1)}}return this};
+
+API.on(API.DJ_ADVANCE, djAdvanceEvent);
+API.on(API.USER_JOIN, UserJoin);
+function UserJoin(user)
+{
+API.sendChat("@" + user.username + " has joined the room.");
+}
+
+function djAdvanceEvent(data){
+    setTimeout(function(){ botMethods.djAdvanceEvent(data); }, 500);
+}
+
+API.on(API.CURATE_UPDATE, callback);
+function callback(obj)
+{
+  var media = API.getMedia();
+  API.sendChat(obj.user.username + " Added this song!");
+}
+
+botMethods.skip = function(){
+    setTimeout(function(){
+        if(!cancel) API.moderateForceSkip();
+    }, 3500);
+};
+
+botMethods.load = function(){
+    toSave = JSON.parse(localStorage.getItem("killerBotSave"));
+    killerBot.settings = toSave.settings;
+    ruleSkip = toSave.ruleSkip;
+};
+
+botMethods.save = function(){localStorage.setItem("killerBotSave", JSON.stringify(toSave))};
+
+botMethods.loadStorage = function(){
+    if(localStorage.getItem("killerBotSave") !== null){
+        botMethods.load();
+    }else{
+        botMethods.save();
+    }
+};
+
+botMethods.checkHistory = function(){
+    currentlyPlaying = API.getMedia(), history = API.getHistory();
+    caught = 0;
+    for(var i = 0; i < history.length; i++){
+        if(currentlyPlaying.cid === history[i].media.cid){
+            caught++;
         }
-        User.prototype.init = function () {
-            return this.lastActivity = new Date()
-        };
-        User.prototype.updateActivity = function () {
-            this.lastActivity = new Date();
-            this.afkWarningCount = 0;
-            return this.lastWarning = null
-        };
-        User.prototype.getLastActivity = function () {
-            return this.lastActivity
-        };
-        User.prototype.getLastWarning = function () {
-            if (this.lastWarning === null) {
-                return false
-            } else {
-                return this.lastWarning
-            }
-        };
-        User.prototype.getUser = function () {
-            return this.user
-        };
-        User.prototype.getWarningCount = function () {
-            return this.afkWarningCount
-        };
-        User.prototype.getIsDj = function () {
-            var a, dj;
-            a = API.getDJ();
-            if (this.user.id === a.id) {
-                return true
-            }
-            return false
-        };
-        User.prototype.warn = function () {
-            this.afkWarningCount++;
-            return this.lastWarning = new Date()
-        };
-        User.prototype.notDj = function () {
-            this.afkWarningCount = 0;
-            return this.lastWarning = null
-        };
-        User.prototype.inRoom = function (a) {
-            return this.isInRoom = a
-        };
-        User.prototype.updateVote = function (v) {
-            if (this.isInRoom) {
-                return data.voteLog[this.user.id][data.currentsong.id] = v
-            }
-        };
-        return User
-    })();
-    RoomHelper = (function () {
-        function RoomHelper() {}
-        RoomHelper.prototype.lookupUser = function (a) {
-            var b, u, _ref;
-            _ref = data.users;
-            for (b in _ref) {
-                u = _ref[b];
-                if (u.getUser().username === a) {
-                    return u.getUser()
+    }
+    caught--;
+    return caught;
+};
+ 
+function listener(data)
+{
+    if (data == null)
+    {
+        return;
+    }
+ 
+    var title = API.getMedia().title;
+    var author = API.getMedia().author;
+    for (var i = 0; i < blockedSongs.length; i++)
+    {
+        if (title.indexOf(blockedSongs[i]) != -1 || author.indexOf(blockedArtists[i]) != -1)
+        {
+            API.moderateForceSkip();
+            chatMe("I Skipped: \"" + title + "\" because it is blocked.");
+            return;
+        }
+    }
+ 
+    var songLenRaw = $("#time-remaining-value").text();
+    var songLenParts = songLenRaw.split(":");
+    var songLen = (parseInt(songLenParts[0].substring(1)) * 60) + parseInt(songLenParts[1]);
+    if (songLen >= songBoundary)
+    {
+        window.setTimeout(skipLongSong, 1000 * songBoundary);
+    }
+}
+ 
+botMethods.getID = function(username){
+    var users = API.getUsers();
+    var result = "";
+    for(var i = 0; i < users.length; i++){
+        if(users[i].username === username){
+            result = users[i].id;
+            return result;
+        }
+    }
+
+    return "notFound";
+};
+
+botMethods.cleanString = function(string){
+    return string.replace(/&#39;/g, "'").replace(/&amp;/g, "&").replace(/&#34;/g, "\"").replace(/&#59;/g, ";").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+};
+
+botMethods.djAdvanceEvent = function(data){
+    clearTimeout(killerBot.pubVars.skipOnExceed);
+    if(killerBot.misc.lockSkipping){
+        API.moderateAddDJ(killerBot.misc.lockSkipped);
+        killerBot.misc.lockSkipped = "0";
+        killerBot.misc.lockSkipping = false;
+        setTimeout(function(){ API.moderateRoomProps(false, true); }, 500);
+    }
+    var song = API.getMedia();
+    if(botMethods.checkHistory() > 0 && killerBot.settings.historyFilter){
+        if(API.getUser().permission < 2){
+            API.sendChat("This song is in the history! You should make me a mod so that I could skip it!");
+        }else if(API.getUser().permission > 1){
+            API.sendChat("@" + API.getDJ().username + ", playing songs that are in the history isn't allowed, please check next time! Skipping..");
+           API.moderateForceSkip();
+        }else if(song.duration > killerBot.settings.maxLength * 60){
+            killerBot.pubVars.skipOnExceed = setTimeout( function(){
+               API.sendChat("@"+ API.getDJ().username +" You have now played for as long as this room allows, time to let someone else have the booth!");
+             API.moderateForceSkip();
+            }, killerBot.settings.maxLength * 60000);
+            API.sendChat("@"+ API.getDJ().username +" This song will be skipped " + killerBot.settings.maxLength + " minutes from now because it exceeds the max song length.");
+        }else{
+            setTimeout(function(){
+                if(botMethods.checkHistory() > 0 && killerBot.settings.historyFilter){
+                 API.sendChat("@" + API.getDJ().username + ", playing songs that are in the history isn't allowed, please check next time! Skipping..");
+                    API.moderateForceSkip();
+                };
+            }, 1500);
+        }
+    }
+};
+
+    API.on(API.CHAT, function(data){
+        if(data.message.indexOf('!') === 0){
+            var msg = data.message, from = data.from, fromID = data.fromID;
+            var command = msg.substring(1).split(' ');
+            if(typeof command[2] != "undefined"){
+                for(var i = 2; i<command.length; i++){
+                    command[1] = command[1] + ' ' + command[i];
                 }
             }
-            return false
-        };
-        RoomHelper.prototype.userVoteRatio = function (a) {
-            var b, songVotes, vote, votes;
-            songVotes = data.voteLog[a.id];
-            votes = {
-                'woot': 0,
-                'meh': 0
-            };
-            for (b in songVotes) {
-                vote = songVotes[b];
-                if (vote === 1) {
-                    votes['woot']++
-                } else if (vote === -1) {
-                    votes['meh']++
-                }
-            }
-            votes['positiveRatio'] = (votes['woot'] / (votes['woot'] + votes['meh'])).toFixed(2);
-            return votes
-        };
-        return RoomHelper
-    })();
-    populateUserData = function () {
-        var u, users, _i, _len;
-        users = API.getUsers();
-        for (_i = 0; _i < users.length; _i++) {
-            u = users[_i];
-            data.users[u.id] = new User(u);
-            data.voteLog[u.id] = {}
-        }
-    };
-    initEnvironment = function () {};
-    initialize = function () {
-        pupOnline();
-        populateUserData();
-        initEnvironment();
-        initHooks();
-        data.startup();
-        data.newSong();
-        return data.startAfkInterval()
-    };
-    afkCheck = function () {
-        var a, id, lastActivity, lastWarned, now, oneMinute, secsLastActive, timeSinceLastActivity, timeSinceLastWarning, twoMinutes, user, warnMsg, _ref, _results;
-        _ref = data.users;
-        _results = [];
-        for (id in _ref) {
-            user = _ref[id];
-            now = new Date();
-            lastActivity = user.getLastActivity();
-            timeSinceLastActivity = now.getTime() - lastActivity.getTime();
-            if (timeSinceLastActivity > data.afkTime) {
-                if (user.getIsDj()) {
-                    secsLastActive = timeSinceLastActivity / 1000;
-                    if (user.getWarningCount() === 0) {
-                        user.warn()
-                    } else if (user.getWarningCount() === 1) {
-                        lastWarned = user.getLastWarning();
-                        timeSinceLastWarning = now.getTime() - lastWarned.getTime();
-                        twoMinutes = 2 * 60 * 1000;
-                        if (timeSinceLastWarning > twoMinutes) {
-                            user.warn();
-                            _results.push(API.sendChat(warnMsg))
-                        } else {
-                            _results.push(void 0)
+API.moderateDeleteChat(data.chatID);
+            if(killerBot.misc.ready || killerBot.admins.indexOf(fromID) > -1 || API.getUser(data.fromID).permission > 1){
+                switch(command[0].toLowerCase()){
+                    case "marco":
+                        API.sendChat("Polo");
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
                         }
-                    } else if (user.getWarningCount() === 2) {
-                        lastWarned = user.getLastWarning();
-                        timeSinceLastWarning = now.getTime() - lastWarned.getTime();
-                        oneMinute = 1 * 60 * 1000;
-                        if (timeSinceLastWarning > oneMinute) {
-                            a = API.getDJ();
-                            if (a.id !== user.getUser().id) {
-                                API.sendChat("DJ \"" + user.getUser().username + "\" is AFK!");
-                                _results.push(user.warn())
-                            } else {
-                                _results.push(void 0)
+                        break;
+    case "say":
+                    if(API.getUser(fromID).permission > 1 || Funbot.admins.indexOf(fromID) > -1){
+                        if(typeof command[1] === "undefined"){
+                            }else{
+                            API.sendChat(command[1]);
+                        }
+                    }
+                        break;
+                    case "djinfo":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1){
+                            var total = + API.getDJ().djPoints + API.getDJ().listenerPoints + API.getDJ().curatorPoints;
+                            API.sendChat("Current dj is: "+ API.getDJ().username +". Points: "+ total +" | Fans: "+API.getDJ().fans+" | Curated: "+ API.getDJ().curatorPoints +".");
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+
+                    case "rules":
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("Room Rules - 1.Do not play troll songs 2.Do not ask for ranks 3.Don\'t spam 4.No Advertising rooms, websites, etc.. 5.No songs over 5 minutes unless aproved by a mod 6.Dont spam dislike peoples videos, or you will be banned.");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+"Room Rules - 1.Do not play troll songs 2.Do not ask for ranks 3.Don\'t spam 4.No Advertising rooms, websites, etc.. 5.No songs over 5 minutes unless aproved by a mod 6.Dont spam dislike peoples videos, or you will be banned.");
+                        }else{
+                            API.sendChat("Room Rules - 1.Do not play troll songs 2.Do not ask for ranks 3.Don\'t spam 4.No Advertising rooms, websites, etc.. 5.No songs over 5 minutes unless aproved by a mod 6.Dont spam dislike peoples videos, or you will be banned.");
+                        }
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+/*
+                    case "theme":
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("Welcome to the swag-craft radio!");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+"The room is primarily for EDM tracks, however we do allow variations. It's only preferred that you play EDM and you don't always have to play it, you can play whatever you want as long as it doesn't get too many dislikes.");
+                        }else{
+                            API.sendChat("The room is primarily for EDM tracks, however we do allow variations. It's only preferred that you play EDM and you don't always have to play it, you can play whatever you want as long as it doesn't get too many dislikes.");
+                        }
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+					
+					case "whatisemd":
+					case "emd":
+					case "wie":
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("If you don't know what EDM(electronic dance music) is, Go here: http://goo.gl/Xt3u and a list of edm genres http://goo.gl/mhkV.");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+"If you don't know what EDM(electronic dance music) is, Go here: http://goo.gl/Xt3u and a list of edm genres http://goo.gl/mhkV.");
+                        }else{
+                            API.sendChat("If you don't know what EDM(electronic dance music) is, Go here: http://goo.gl/Xt3u and a list of edm genres http://goo.gl/mhkV.");
+                        }
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }*/
+                        break;
+					             /*
+					case "whywoot":
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("Plug gives you 1 point for wooting the current song if you don't like the song i suggest you remain neutral");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+" Plug gives you 1 point for wooting the current song if you don't like the song i suggest you remain neutral");
+                        }else{
+                            API.sendChat("Plug gives you 1 point for wooting the current song if you don't like the song i suggest you remain neutral");
+                        }
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+                                    */
+                    case "commands":
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("User Commands - rules | theme | help | linkify | songlink  cookie | hug | djinfo | marco | slap | residentdj | bouncer | manager | host | brandambassador");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+"User Commands - rules | theme | help | linkify | songlink  cookie | hug | djinfo | marco | slap | residentdj | bouncer | manager | host | brandambassador");
+                        }else{
+                            API.sendChat("User Commands - rules | theme | help | linkify | songlink  cookie | hug | djinfo | marco | slap | residentdj | bouncer | manager | host | brandambassador");
+                        }
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+						
+					case "linkify":
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("@" + data.from + " You need to put a link!");
+                        }else if(command[1].toLowerCase().indexOf("plug.dj") === -1 && command[1].toLowerCase().indexOf("bug.dj") === -1){
+                            API.sendChat("http://"+command[1]);
+                        }else{
+                            API.sendChat("Nice try! Advertising is not allowed in this room.");
+                        }
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+						 /*
+					case "whymeh":
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("Reserve Mehs for songs that are a) extremely overplayed b) off genre c) absolutely god awful or d) troll songs. ");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+" Reserve Mehs for songs that are a) extremely overplayed b) off genre c) absolutely god awful or d) troll songs. ");
+                        }else{
+                            API.sendChat("Reserve Mehs for songs that are a) extremely overplayed b) off genre c) absolutely god awful or d) troll songs. ");
+                        }
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+                                  */
+                           
+                    case "songlink":
+                        if(API.getMedia().format == 1){
+                            API.sendChat("@" + data.from + " " + "Songlink @ http://youtu.be/" + API.getMedia().cid);
+                        }else{
+                            var id = API.getMedia().cid;
+                            SC.get('/tracks', { ids: id,}, function(tracks) {
+                                API.sendChat("@"+data.from+" "+tracks[0].permalink_url);
+                            });
+                        }
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+					
+					case "bitchslap":
+                    case "slap":
+                        if(typeof command[1] == "undefined"){
+                        API.sendChat("@"+ data.from +" just gave a huge slap to @"+ API.getDJ().username +" for playing this awful track!");
+                        
+                         }
+                        break;
+						
+/*
+                    case "autowoot":
+                        API.sendChat("https://github.com/McKiller5252/AutoWoot");
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }*/
+                        break;/*
+					case "residentdj":
+                    case "residentdjs":
+                        if(killerBot.admins.indexOf(fromID) > -1 || API.getStaff().permission > 2){
+                            API.sendChat("Resident DJs have no moderation privileges but their name will appear in the chat the same color as the community staff.");
+                         setTimeout(function(){
+                            API.sendChat("This role is usually given to artists, promoters or friends of the Community Staff to make the person stand out from the crowd. Resident DJs can, however, join an empty DJ booth.");
+                         }, 650);
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+                        
+                        
+                    case "bouncer":
+                    case "bouncers":
+                        if(killerBot.admins.indexOf(fromID) > -1 || API.getStaff().permission > 2){
+                            API.sendChat("Bouncers are people you trust to maintain order in the community, and a community can have an unlimited number of Bouncers. They can add/remove DJs, force skip, ban people from the community and delete offensive chat messages.");
+                         setTimeout(function(){
+                            API.sendChat("Bouncers cannot create other bouncers.");
+                         }, 650);
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+                        
+                    case "manager":
+                    case "managers":
+                        if(killerBot.admins.indexOf(fromID) > -1 || API.getStaff().permission > 3){
+                            API.sendChat("There is currently a limit of 10 managers per community. Managers cannot add other managers; they can only add bouncers. Managers cannot change the community name or description, but they can change the community settings like disable/enable");
+                            setTimeout(function(){
+                            API.sendChat("The Wait List, toggle DJ cycling, etc.) and perform all the other moderation actions.");
+                         }, 650);
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+                        
+                    case "host":
+                    case "hosts":
+                        if(killerBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
+                            API.sendChat("A Host is the person who created the community. Hosts can create co-hosts (up to 2 currently). Hosts and co-hosts have the same privileges except that co-hosts cannot create other co-hosts. Hosts and co-hosts can change the community name and");
+                         setTimeout(function(){
+                            API.sendChat("description, as well as the community rules and can perform all of the normal moderation actions such as force skip a DJ, ban a person from the community, delete inappropriate chat messages, and move people in the Wait List as well as add/remove them.");
+                         }, 650);
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+                        
+                    case "ba":
+                    case "brandambassador":
+                    case "ambassador":
+                        if(killerBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
+                            API.sendChat("Brand Ambassadors have all of the same abilities of Managers, except their privileges extend across all of the communities on plug.dj. Brand Ambassadors are a good resource for answering");
+                         setTimeout(function(){
+                            API.sendChat(" general questions you may have. Brand Ambassadors will have a green microphone next to their name in chat. They are there to assist you.");
+                         }, 650);
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;   */
+					
+					case "help":
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("Create a playlist and populate it with songs from either YouTube or Soundcloud. Click the 'Join Waitlist' button and wait your turn to play music.");
+                                setTimeout(function(){
+                            API.sendChat("Ask a mod if you're unsure about your song choice.");
+                         }, 650);
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+ "Create a playlist and populate it with songs from either YouTube or Soundcloud. Click the 'Join Waitlist' button and wait your turn to play music.");
+                                setTimeout(function(){
+                            API.sendChat("Ask a mod if you're unsure about your song choice.");
+                         }, 650);
+                        }
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+
+                }
+            }
+        }
+    });
+
+    API.on(API.CHAT, function(data){
+        if(data.message.indexOf('!') === 0){
+            var msg = data.message, from = data.from, fromID = data.fromID;
+            var command = msg.substring(1).split(' ');
+            if(typeof command[2] != "undefined"){
+                for(var i = 2; i<command.length; i++){
+                    command[1] = command[1] + ' ' + command[i];
+                }
+            }
+            if(killerBot.misc.ready || killerBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+                switch(command[0].toLowerCase()){
+                   // commented out because the bot isn't running on a dedicated bot account
+                     case "meh":
+                     if(API.getUser(data.fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1) $("#meh").click();
+                     break;
+                               
+                     case "woot":
+                     if(API.getUser(data.fromID).permission > 1 || test.admins.indexOf(fromID) > -1)  $("#woot").click();
+                     break;
+
+                    case "skip":
+                    if(API.getUser(data.fromID).permission > 1){
+                        if(typeof command[1] === "undefined"){
+                            API.moderateForceSkip();
+							API.moderateDeleteChat(data.chatID);
+                        }else{
+                            API.sendChat('@'+API.getDJs()[0].username+' '+command[1]);
+                            API.moderateForceSkip();
+                        }
+                    }
+                        break;
+                        break;
+                    case 'cancel':
+                        cancel = true;
+                        API.sendChat('AutoSkip cancelled');
+                        break;
+						
+					case 'clearchat':
+                        if( API.getUser(data.fromID).permission > 1){
+						var arg = $('#chat-messages').children();
+						       for(var i=0;i<arg.length;i++) API.moderateDeleteChat(arg[i].className.substr(arg[i].className.indexOf('cid-')+4,14));
+                        deleteAll = true;
+						API.sendChat('Chat Cleared!');
+						}
+                        break;
+
+                    case "lockskip":
+                        if( API.getUser(data.fromID).permission > 1){
+                            API.moderateRoomProps(true, true);
+                            killerBot.misc.lockSkipping = true;
+                            killerBot.misc.lockSkipped = API.getDJs()[0].id;
+                            setTimeout(function(){ API.moderateRemoveDJ(killerBot.misc.lockSkipped); }, 500);
+                        }else{
+                            API.sendChat("This command requires bouncer or higher!");
+                        }
+                        break;
+                    case 'rvf':
+                    case 'removedfilter':
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1) killerBot.settings.removedFilter ? API.sendChat("Removed video filter is enabled") : API.sendChat("Removed video is disabled");
+                        break;
+                    case 'trvf':
+                    case 'toggleremovedfilter':
+                        killerBot.settings.removedFilter = !killerBot.settings.removedFilter;
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1) killerBot.settings.removedFilter ? API.sendChat("Removed video filter is enabled") : API.sendChat("Removed video is disabled");
+                        break;
+                    case "historyfilter":
+                    case "hf":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1) killerBot.settings.historyFilter ? API.sendChat("History filter is enabled") : API.sendChat("History filter is disabled");
+                        botMethods.save();
+                        break;
+
+                    case "swearfilter":
+                    case "sf":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1) killerBot.settings.swearFilter ? API.sendChat("Swearing filter is enabled") : API.sendChat("Swearing filter is disabled");
+                        botMethods.save();
+                        break;
+
+                    case "racismfilter":
+                    case "rf":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1) killerBot.settings.racismFilter ? API.sendChat("Racism filter is enabled") : API.sendChat("Racism filter is disabled");
+                        botMethods.save();
+                        break;
+
+                    case "beggerfilter":
+                    case "bf":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1) killerBot.settings.beggerFilter ? API.sendChat("Begger filter is enabled") : API.sendChat("Begger filter is disabled");
+                        botMethods.save();
+                        break;
+						
+					case "welcomefilter":
+                    case "wf":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1) killerBot.settings.greetMessage ? API.sendChat("Welcome filter is enabled") : API.sendChat("Welcome filter is disabled");
+                        botMethods.save();
+                        break;
+						
+                    case "tsf":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1){
+                            if(killerBot.settings.swearFilter){
+                                killerBot.settings.swearFilter = false;
+                                API.sendChat("Bot will no longer filter swearing.");
+                            }else{
+                                killerBot.settings.swearFilter = true;
+                                API.sendChat("Bot will now filter swearing.");
                             }
-                        } else {
-                            _results.push(void 0)
                         }
-                    } else {
-                        _results.push(void 0)
-                    }
-                } else {
-                    _results.push(user.notDj())
-                }
-            } else {
-                _results.push(void 0)
-            }
-        }
-        return _results
-    };
-    msToStr = function (a) {
-        var b, msg, timeAway;
-        msg = '';
-        timeAway = {
-            'days': 0,
-            'hours': 0,
-            'minutes': 0,
-            'seconds': 0
-        };
-        b = {
-            'day': 24 * 60 * 60 * 1000,
-            'hour': 60 * 60 * 1000,
-            'minute': 60 * 1000,
-            'second': 1000
-        };
-        if (a > b['day']) {
-            timeAway['days'] = Math.floor(a / b['day']);
-            a = a % b['day']
-        }
-        if (a > b['hour']) {
-            timeAway['hours'] = Math.floor(a / b['hour']);
-            a = a % b['hour']
-        }
-        if (a > b['minute']) {
-            timeAway['minutes'] = Math.floor(a / b['minute']);
-            a = a % b['minute']
-        }
-        if (a > b['second']) {
-            timeAway['seconds'] = Math.floor(a / b['second'])
-        }
-        if (timeAway['days'] !== 0) {
-            msg += timeAway['days'].toString() + 'd'
-        }
-        if (timeAway['hours'] !== 0) {
-            msg += timeAway['hours'].toString() + 'h'
-        }
-        if (timeAway['minutes'] !== 0) {
-            msg += timeAway['minutes'].toString() + 'm'
-        }
-        if (timeAway['seconds'] !== 0) {
-            msg += timeAway['seconds'].toString() + 's'
-        }
-        if (msg !== '') {
-            return msg
-        } else {
-            return false
-        }
-    };
-    Command = (function () {
-        function Command(a) {
-            this.msgData = a;
-            this.init()
-        }
-        Command.prototype.init = function () {
-            this.parseType = null;
-            this.command = null;
-            return this.rankPrivelege = null
-        };
-        Command.prototype.functionality = function (a) {};
-        Command.prototype.hasPrivelege = function () {
-            var a;
-            a = data.users[this.msgData.fromID].getUser();
-            switch (this.rankPrivelege) {
-            case 'host':
-                return a.permission === 5;
-            case 'cohost':
-                return a.permission >= 4;
-            case 'mod':
-                return a.permission >= 3;
-            case 'manager':
-                return a.permission >= 3;
-            case 'bouncer':
-                return a.permission >= 2;
-            case 'featured':
-                return a.permission >= 1;
-            default:
-                return true
-            }
-        };
-        Command.prototype.commandMatch = function () {
-            var a, msg, _i, _len, _ref;
-            msg = this.msgData.message;
-            if (typeof this.command === 'string') {
-                if (this.parseType === 'exact') {
-                    if (msg === this.command) {
-                        return true
-                    } else {
-                        return false
-                    }
-                } else if (this.parseType === 'startsWith') {
-                    if (msg.substr(0, this.command.length) === this.command) {
-                        return true
-                    } else {
-                        return false
-                    }
-                } else if (this.parseType === 'contains') {
-                    if (msg.indexOf(this.command) !== -1) {
-                        return true
-                    } else {
-                        return false
-                    }
-                }
-            } else if (typeof this.command === 'object') {
-                _ref = this.command;
-                for (_i = 0; _i < _ref.length; _i++) {
-                    a = _ref[_i];
-                    if (this.parseType === 'exact') {
-                        if (msg === a) {
-                            return true
+                        botMethods.save();
+                        break;
+
+                    case "trf":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1){
+                            if(killerBot.settings.racismFilter){
+                                killerBot.settings.racismFilter = false;
+                                API.sendChat("Bot will no longer filter racism.");
+                            }else{
+                                killerBot.settings.racismFilter = true;
+                                API.sendChat("Bot will now filter racism.");
+                            }
                         }
-                    } else if (this.parseType === 'startsWith') {
-                        if (msg.substr(0, a.length) === a) {
-                            return true
+                        botMethods.save();
+                        break;
+
+                    case "tbf":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1){
+                            if(killerBot.settings.beggerFilter){
+                                killerBot.settings.beggerFilter = false;
+                                API.sendChat("Bot will no longer filter fan begging.");
+                            }else{
+                                killerBot.settings.beggerFilter = true;
+                                API.sendChat("Bot will now filter fan begging.");
+                            }
                         }
-                    } else if (this.parseType === 'contains') {
-                        if (msg.indexOf(a) !== -1) {
-                            return true
+                        botMethods.save();
+                        break;
+                    case "thf":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1){
+                            if(killerBot.settings.historyFilter){
+                                killerBot.settings.historyFilter = false;!
+                                    API.sendChat("Bot will no longer skip songs that are in the room history.");
+                            }else{
+                                killerBot.settings.historyFilter = true;
+                                API.sendChat("Bot will now skip songs that are in the room history.");
+                            }
                         }
-                    }
-                }
-                return false
-            }
-        };
-        Command.prototype.evalMsg = function () {
-            if (this.commandMatch() && this.hasPrivelege()) {
-                this.functionality();
-                return true
-            } else {
-                return false
-            }
-        };
-        return Command
-    })();
-    afksCommand = (function (b) {
-        __extends(afksCommand, b);
+                        botMethods.save();
+                        break;
 
-        function afksCommand() {
-            _ref10 = afksCommand.__super__.constructor.apply(this, arguments);
-            return _ref10
-        }
-        afksCommand.prototype.init = function () {
-            this.command = '!afks';
-            this.parseType = 'exact';
-            return this.rankPrivelege = 'user'
-        };
-        afksCommand.prototype.functionality = function () {
-            var a, djAfk, djs, msg, now, _i, _len;
-            msg = '';
-            djs = API.getDJ();
-            a = djs;
-            now = new Date();
-            djAfk = now.getTime() - data.users[a.id].getLastActivity().getTime();
-            if (djAfk > (5 * 60 * 1000)) {
-                if (msToStr(djAfk) !== false) {
-                    msg += a.username + ' - ' + msToStr(djAfk);
-                    msg += '. '
-                }
-            }
-            if (msg === '') {
-                return API.sendChat("All DJs are here!")
-            } else {
-                return API.sendChat('AFK DJs: ' + msg)
-            }
-        };
-        return afksCommand
-    })(Command);
-    dieCommand = (function (a) {
-        __extends(dieCommand, a);
-
-        function dieCommand() {
-            _ref14 = dieCommand.__super__.constructor.apply(this, arguments);
-            return _ref14
-        }
-        dieCommand.prototype.init = function () {
-            this.command = '!die';
-            this.parseType = 'exact';
-            return this.rankPrivelege = 'cohost'
-        };
-        dieCommand.prototype.functionality = function () {
-            undoHooks();
-            data.implode();
-            return API.sendChat('Bot is now OFFLINE!')
-        };
-        return dieCommand
-    })(Command);
-    f = (function (c) {
-        __extends(f, c);
-
-        function f() {
-            _votekickCommand = f.__super__.constructor.apply(this, arguments);
-            return _votekickCommand
-        }
-        f.prototype.init = function () {
-            this.command = '!ban';
-            this.parseType = 'startsWith';
-            return this.rankPrivelege = 'cohost'
-        };
-        f.prototype.functionality = function () {
-            var a, r, users, votekickNastavit, votekickKoho, votekickDovod;
-            a = this.msgData.message;
-            votekickNastavit = a.split(' ');
-            votekickKoho = votekickNastavit[1];
-            votekickDovod = votekickNastavit[2];
-            r = new RoomHelper();
-            votekickKoho = votekickKoho.replace("@", "");
-            userRemove = r.lookupUser(votekickKoho);
-            if (userRemove === false) {
-                API.sendChat("BAN USAGE: !ban @UserName")
-            } else {
-                for (_kickus = 0; _kickus < API.getUsers().length; _kickus++) {
-                    if (API.getUsers()[_kickus].username === votekickKoho) {
-                        var b = API.getUsers()[_kickus].id
-                    }
-                }
-                API.sendChat("@" + votekickKoho + " good bye!");
-                setTimeout(function () {
-                    API.moderateBanUser(b, "lama")
-                }, 1000)
-            }
-        };
-        return f
-    })(Command);
-    skipCommand = (function (a) {
-        __extends(skipCommand, a);
-
-        function skipCommand() {
-            _ref25 = skipCommand.__super__.constructor.apply(this, arguments);
-            return _ref25
-        }
-        skipCommand.prototype.init = function () {
-            this.command = '!skip';
-            this.parseType = 'startsWith';
-            return this.rankPrivelege = 'cohost'
-        };
-        skipCommand.prototype.functionality = function () {
-            return API.moderateForceSkip()
-        };
-        return skipCommand
-    })(Command);
-    commandsCommand = (function (b) {
-        __extends(commandsCommand, b);
-
-        function commandsCommand() {
-            _ref27 = commandsCommand.__super__.constructor.apply(this, arguments);
-            return _ref27
-        }
-        commandsCommand.prototype.init = function () {
-            this.command = '!help';
-            this.parseType = 'exact';
-            return this.rankPrivelege = 'user'
-        };
-        commandsCommand.prototype.functionality = function () {
-            var a, c, cc, cmd, msg, user, _i, _j, _len, _len1, _ref28, _ref29;
-            a = [];
-            user = API.getUser(this.msgData.fromID);
-            window.capturedUser = user;
-            if (user.permission > 5) {
-                a = ['user', 'mod', 'host', 'cohost']
-            } else if (user.permission > 2) {
-                a = ['user', 'mod', 'cohost']
-            } else {
-                a = ['user']
-            }
-            msg = '';
-            for (_i = 0; _i < cmds.length; _i++) {
-                cmd = cmds[_i];
-                c = new cmd('');
-                if (__indexOf.call(a, c.rankPrivelege) >= 0) {
-                    if (typeof c.command === "string") {
-                        msg += c.command + ', '
-                    } else if (typeof c.command === "object") {
-                        _ref29 = c.command;
-                        for (_j = 0; _j < _ref29.length; _j++) {
-                            cc = _ref29[_j];
-                            msg += cc + ', '
+                    case "version":
+                        API.sendChat("SwagBot Script version " + killerBot.misc.version);
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
                         }
+                        break;
+
+                    case "origin":
+                    case "author":
+                    case "authors":
+                    case "creator":
+                        API.sendChat(killerBot.misc.origin);
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+
+                     case "status":
+                        if(killerBot.admins.indexOf(fromID) > -1){
+                            var response = "";
+                            var currentTime = new Date().getTime();
+                            var minutes = Math.floor((currentTime - joined) / 60000);
+                            var hours = 0;
+                            while(minutes > 60){
+                                minutes = minutes - 60;
+                                hours++;
+                            }
+                            hours == 0 ? response = "Running for " + minutes + "m " : response = "Running for " + hours + "h " + minutes + "m";
+                            response = response + " | Begger filter: "+killerBot.settings.beggerFilter;
+                            response = response + " | Swear filter: "+killerBot.settings.swearFilter;
+                            response = response + " | Racism filter: "+killerBot.settings.racismFilter;
+                            response = response + " | History filter: "+killerBot.settings.historyFilter;
+                            response = response + " | MaxLength: " + killerBot.settings.maxLength + "m";
+                            response = response + " | Cooldown: " + killerBot.settings.cooldown + "s";
+                            response = response + " | Removed Video Filter: "+ killerBot.settings.removedFilter;
+                            API.sendChat(response);
+                        }
+                        break;
+ 
+
+                    case "cooldown":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1){
+                            if(typeof command[1] == "undefined"){
+                                if(killerBot.settings.cooldown != 0.0001){
+                                    API.sendChat('Cooldown is '+killerBot.settings.cooldown+' seconds');
+                                }else{
+                                    API.sendChat('Cooldown is disabled');
+                                }
+                            }else if(command[1] == "disable"){
+                                killerBot.settings.cooldown = 0.0001;
+                                API.sendChat('Cooldown disabled');
+                            }else{
+                                killerBot.settings.cooldown = command[1];
+                                API.sendChat('New cooldown is '+killerBot.settings.cooldown+' seconds');
+                            }
+                        }
+                        botMethods.save();
+                        break;
+
+                    case "maxlength":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1){
+                            if(typeof command[1] == "undefined"){
+                                if(killerBot.settings.maxLength != 1e+50){
+                                    API.sendChat('Maxlength is '+killerBot.settings.maxLength+' minutes');
+                                }else{
+                                    API.sendChat('Maxlength is disabled');
+                                }
+                            }else if(command[1] == "disable"){
+                                killerBot.settings.maxLength = Infinity;
+                                API.sendChat('Maxlength disabled');
+                            }else{
+                                killerBot.settings.maxLength = command[1];
+                                API.sendChat('New maxlength is '+killerBot.settings.maxLength+' minutes');
+                            }
+                        }
+                        botMethods.save();
+                        break;
+
+                    case "interactive":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1){
+                            killerBot.settings.interactive ? API.sendChat("Bot is interactive.") : API.sendChat("Bot is not interactive.");
+                        }
+                        break;
+
+                    case "toggleinteractive":
+                    case "ti":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1){
+                            if(killerBot.settings.interactive){
+                                killerBot.settings.interactive = false;
+                                API.sendChat("Bot will no longer interact.");
+                            }else{
+                                killerBot.settings.interactive = true;
+                                API.sendChat("Bot will now interact.");
+                            }
+                        }
+                        botMethods.save();
+                        break;
+
+                    case "save":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1){
+                            botMethods.save();
+                            API.sendChat("Settings saved.");
+                        }
+                        break;
+
+                    case "silence":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1){
+                            killerBot.settings.interactive = false;
+                            API.sendChat("Yessir!");
+                        }
+                        botMethods.save();
+                        break;
+/*
+                    case "changelog":
+                        if(API.getUser(fromID).permission > 1 || killerBot.admins.indexOf(fromID) > -1){
+                            API.sendChat("New in version " + killerBot.misc.version + " - " + killerBot.misc.changelog)
+                        }
+                        break;*/
+
+                }
+            }
+        }
+    });
+
+    API.on(API.CHAT, function(data){
+        if(data.message.indexOf('!') === 0){
+            var msg = data.message, from = data.from, fromID = data.fromID;
+            var command = msg.substring(1).split(' ');
+            if(typeof command[2] != "undefined"){
+                for(var i = 2; i<command.length; i++){
+                    command[1] = command[1] + ' ' + command[i];
+                }
+            }
+            if(killerBot.misc.ready || killerBot.admins.indexOf(fromID) > -1 ||API.getUser(fromID).permission > 1){
+                switch(command[0].toLowerCase()){
+                    /*
+                       case "taco":
+                        if(typeof command[1] == "undefined"){
+                            var crowd = API.getUsers();
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomTaco = Math.floor(Math.random() * killerBot.misc.tacos.length);
+                            var randomSentence = Math.floor(Math.random() * 3);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("@" + crowd[randomUser].username + ", take this " + killerBot.misc.tacos[randomTaco] + "!");
+                                    break;
+                                case 1:
+                                    API.sendChat("@" + crowd[randomUser].username + ", quickly! Eat this " + killerBot.misc.tacos[randomTaco] + " before I do!");
+                                    break;
+                                case 2:
+                                    API.sendChat("One free " + killerBot.misc.tacos[randomTaco] + " for you, @" + crowd[randomUser].username + ". :3");
+                                    break;
+                                case 3:
+                                    API.sendChat("/me throws a " + killerBot.misc.tacos[randomTaco] + " at @" + crowd[randomUser].username + "!");
+                                    break;
+                            }
+                        }else{
+                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
+                            var randomTaco = Math.floor(Math.random() * killerBot.misc.tacos.length);
+                            var randomSentence = Math.floor(Math.random() * 3);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("@" + botMethods.cleanString(command[1]) + ", take this " + killerBot.misc.tacos[randomTaco] + "!");
+                                    break;
+                                case 1:
+                                    API.sendChat("@" + botMethods.cleanString(command[1]) + ", quickly! Eat this " + killerBot.misc.tacos[randomTaco] + " before I do!");
+                                    break;
+                                case 2:
+                                    API.sendChat("One free " + killerBot.misc.tacos[randomTaco] + " for you, @" + botMethods.cleanString(command[1]) + ". :3");
+                                    break;
+                                case 3:
+                                    API.sendChat("/me throws a " + killerBot.misc.tacos[randomTaco] + " at @" + botMethods.cleanString(command[1]) + "!");
+                                    break;
+                            }
+                        }
+                        if(killerBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+*/
+                    case "hug":
+                        if(typeof command[1] == "undefined"){
+                            var crowd = API.getUsers();
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomSentence = Math.floor(Math.random() * 3);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("Hugs? Forget that!");
+                                    setTimeout(function(){
+                                        API.sendChat("/me give's @"+crowd[randomUser].username+" a big huge hug.");
+                                    }, 650);
+                                    break;
+                                case 1:
+                                    API.sendChat("/me gives @"+crowd[randomUser].username+" a big bear hug");
+                                    break;
+                                case 2:
+                                    API.sendChat("/me gives @"+crowd[randomUser].username+" a soft, furry hug");
+                                    break;
+                                case 3:
+                                    API.sendChat("/me gives @"+crowd[randomUser].username+" an awkward hug");
+                                    break;
+                            }
+                        }else{
+                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
+                            var crowd = API.getUsers();
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomSentence = Math.floor(Math.random() * 3);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("Hugs? Forget that!");
+                                    setTimeout(function(){
+                                        API.sendChat("/me give's @"+botMethods.cleanString(command[1])+" a big huge hug.");
+                                    }, 650);
+                                    break;
+                                case 1:
+                                    API.sendChat("/me gives @"+botMethods.cleanString(command[1])+" a big bear hug");
+                                    break;
+                                case 2:
+                                    API.sendChat("/me gives @"+botMethods.cleanString(command[1])+" a soft, furry hug");
+                                    break;
+                                case 3:
+                                    API.sendChat("/me gives @"+botMethods.cleanString(command[1])+" an awkward hug");
+                                    break;
+                            }
+                        }
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+                    case "cookie":
+                        if(typeof command[1] == "undefined"){
+                            var crowd = API.getUsers();
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomSentence = Math.floor(Math.random() * 3);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("/me throws a STICK OF DYNAMITE at @"+crowd[randomUser].username);
+                                    break;
+                                case 1:
+                                    API.sendChat("/me drowns @"+crowd[randomUser].username+" in batter");
+                                    break;
+                                case 2:
+                                    API.sendChat("/me shows @"+crowd[randomUser].username+" the power of friendship. BY SLAPPING THEM WITH A COOKIE");
+                                    break;
+                                case 3:
+                                    API.sendChat("/me hands an anthrax laced cookie to @"+crowd[randomUser].username);
+                                    break;
+                            }
+                        }else{
+                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
+                            var randomSentence = Math.floor(Math.random() * 3);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("/me throws a STICK OF DYNAMITE at @"+botMethods.cleanString(command[1]));
+                                    break;
+                                case 1:
+                                    API.sendChat("/me drowns @"+botMethods.cleanString(command[1])+" in batter");
+                                    break;
+                                case 2:
+                                    API.sendChat("/me hands an anthrax laced cookie to @"+botMethods.cleanString(command[1]));
+                                    break;
+                                case 3:
+                                    API.sendChat("/me shows @"+botMethods.cleanString(command[1])+" the power of friendship. BY SLAPPING THEM WITH A COOKIE");
+                                    break;
+                            }
+                        }
+                        if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            killerBot.misc.ready = false;
+                            setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                        }
+                        break;
+
+                    case "run":
+                        if(killerBot.admins.indexOf(fromID) > -1){
+                            a = botMethods.cleanString(command[1]);
+                            console.log(a);
+                            eval(a);
+                        }
+                        break;
+
+                }
+            }
+        }
+    });
+
+    API.on(API.CHAT, function(data){
+        if(data.message.indexOf('!rule ') === 0){
+            var msg = data.message, from = data.from, fromID = data.fromID;
+            var command = msg.substring(1).split(' ');
+
+            if(killerBot.misc.ready || killerBot.admins.indexOf(fromID) > -1 ||API.getUser(fromID).permission > 1){
+                switch(command[1]){
+                    case '1':
+                        API.sendChat('Please keep all chat to English only.');
+                        break;
+                    case '2':
+                        API.sendChat('No swearing in chat.');
+                        break;
+                    case '3':
+                        API.sendChat('Do not spam in chat.');
+                        break;
+                    case '4':
+                        API.sendChat('Do not ask for ranks.');
+                        break;
+                    case '5':
+                        API.sendChat('No web links in chat exept swag-craft related links.');
+                        break;
+                    case '6':
+                        API.sendChat('No songs over 10 minutes. (some songs a little bit over may be allowed, ask a mod)');
+                        break;
+                    case '7':
+                        API.sendChat('Spamming in chat will result in kicked');
+                        break;
+                    case '8':
+                        API.sendChat('FOR THE LOVE OF CELESTIA, CONTROL THE CANTERLOCK');
+                        break;
+                    case '9':
+                        API.sendChat('There is a no tolerance policy for fighting');
+                        break;
+                    case '10':
+                        API.sendChat('All visitors to the room must be treated equally and fairly by all');
+                        break;
+                    case '11':
+                        API.sendChat('Do not ask for, bouncer/manager/host positions');
+                        break;
+                    case '12':
+                        API.sendChat('Respect other users and moderators, continuous disrespect will result in being kicked');
+                        break;
+                    case '13':
+                        API.sendChat('No R34/clop/porn/gore. This includes links, songs, and chat. (If you want to post this stuff anywhere, talk to a moderator about being added to the Skype group, you can post it there with proper tags [NSFW/NSFL])');
+                        break;
+                    case '14':
+                        API.sendChat('No playing episodes/non-music shorts unless you’re the (co)host or were giving permission to play a episode/non-music short by a (co)host');
+                        break;
+                    case '15':
+                        API.sendChat('When posting links, please add NSFW for anything suggestive (anything saucy, porn, gore, or clop is NOT allowed). Add Spoiler tags when necessary as well');
+                        break;
+                    case '16':
+                        API.sendChat('Swearing is allowed in moderation. Racist and derogatory slurs can result in being kicked');
+                        break;
+                    case '17':
+                        API.sendChat('Only moderators may ask who mehed or why');
+                        break;
+                    case '18':
+                        API.sendChat('Impersonating other artists, users, etc. can result in being kicked');
+                        break;
+                    case '19':
+                        API.sendChat('If you\'re going to autojoin, be responsive when someone @mentions you, otherwise you risk being kicked');
+                        break;
+                    case '20':
+                        API.sendChat('Using multiple accounts to DJ or enter the booth or waitlist is not allowed');
+                        break;
+                    case '21':
+                        API.sendChat('Don\'t spam emotes, don\'t use overly large emotes, and don\'t use emotes in your name (Referring to ponymotes)');
+                        break;
+                    case '22':
+                        API.sendChat('Do not ask for fans');
+                        break;
+                    case '23':
+                        API.sendChat('Songs such as Nigel, Pingas, etc. are subject to being skipped on any day but Sunday. !weird for full list');
+                        break;
+                    case '24':
+                        API.sendChat('Do not ask for Fans in chat. Earn them by being polite, helpful, or by playing good music.');
+                        break;
+                    case '25':
+                        API.sendChat('If you have a complaint, do not argue in the chat where everyone can see, instead submit a complaint to the form (http://bit.ly/145oLLW) or take it up with a moderator on Skype. (if you don’t have Skype ask for another form of contact)');
+                        break;
+                    case '26':
+                        API.sendChat('Don’t use excessively long or offensive names');
+                        break;
+                    case '27':
+                        API.sendChat('Have fun and enjoy yourselves!');
+                        break;
+                    case '34':
+                        API.sendChat('hue hue hue');
+                        break;
+                    case '99':
+                        API.sendChat('Just no..');
+                        break;
+                    default:
+                        API.sendChat('Unknown rule!');
+                        break;
+                }
+            }
+        }
+    });
+
+    API.on(API.CHAT, function(data){
+        var msg = data.message, fromID = data.fromID;
+        command = msg.substring(1).split(' ');
+        if(typeof command[3] != "undefined"){
+            for(var i = 3; i<command.length; i++){
+                command[2] = command[2] + ' ' + command[i];
+            }
+        }
+        if(API.getUser(data.fromID).permission > 1){
+            switch(command[0]){
+                case 'ruleskip':
+                    if(command[1].length === 13 && command[1].indexOf(':') === 1 && command[1].indexOf(1) === 0){
+                        ruleSkip[command[1]] = {id: command[1], rule: command[2]};
+                        $.getJSON("http://gdata.youtube.com/feeds/api/videos/"+command[1].substring(2)+"?v=2&alt=jsonc&callback=?", function(json){
+                            setTimeout(function(){
+                                if(typeof json.data.title !== 'undefined'){
+                                    API.sendChat(json.data.title+' added to ruleskip');
+                                }else{
+                                    API.sendChat('Added to ruleskip');
+                                }
+                            }, 500)
+                        });
+                    }else if(command[1].length === 10 && command[1].indexOf(':') === 1 && command[1].indexOf(2) === 0){
+                        ruleSkip[command[1]] = {id: command[1], rule: command[2]};
+                        SC.get('/tracks', {ids: command[1].substring(2)}, function(tracks) {
+                            if(typeof tracks[0].title !== 'undefined'){
+                                API.sendChat(tracks[0].title+' added to ruleskip');
+                            }else{
+                                API.sendChat('Added to ruleskip');
+                            }
+                        });
+                    }else if(typeof ruleSkip[API.getMedia().id] === 'undefined'){
+                    ruleSkip[API.getMedia().id] = {id: API.getMedia().id, rule: command[1]};
+                    API.sendChat(API.getMedia().author+ ' - ' +API.getMedia().title+' added to ruleskip');
+                    API.moderateForceSkip();
+                }
+                    botMethods.save();
+                    break;
+                case 'checkruleskip':
+                    if(typeof command[1] !== 'undefined'){
+                        if(typeof ruleSkip[command[1]] !== 'undefined') API.sendChat(command[1]+' is in the ruleskip array!');
+                        else API.sendChat(command[1]+' is not in the ruleskip array!');
+                    }else{
+                        if(typeof ruleSkip[API.getMedia().id] !== 'undefined') API.sendChat(API.getMedia().id+' is in the ruleskip array')
+                        else API.sendChat(API.getMedia().id+' is not in the ruleskip array');
                     }
+                    break;
+                case 'ruleskipdelete':
+                    if(typeof command[1] !== 'undefined' && typeof ruleSkip[command[1]] !== 'undefined'){
+                        delete ruleSkip[command[1]];
+                        API.sendChat(command[1]+' removed from ruleskip');
+                    }else if(typeof command[1] === 'undefined' && typeof ruleSkip[API.getMedia().id] !== 'undefined'){
+                        delete ruleSkip[API.getMedia().id];
+                        API.sendChat(API.getMedia().id+' removed from ruleskip');
+                    }else if(typeof command[1] !== 'undefined'){
+                        API.sendChat(command[1]+' was not in the ruleskip array!');
+                    }else{
+                        API.sendChat(API.getMedia().id+' was not in the ruleskip array!');
+                    }
+                    botMethods.save()
+                break;
+            }
+        }
+    });
+
+    API.on(API.CHAT, function(data){
+        msg = data.message.toLowerCase(), chatID = data.chatID;
+
+        for(var i = 0; i < killerBot.filters.swearWords.length; i++){
+            if(msg.indexOf(killerBot.filters.swearWords[i].toLowerCase()) > -1 && killerBot.settings.swearFilter){
+                API.moderateDeleteChat(chatID);
+            }
+        }
+        for(var i = 0; i < killerBot.filters.racistWords.length; i++){
+            if(msg.indexOf(killerBot.filters.racistWords[i].toLowerCase()) > -1 && killerBot.settings.racismFilter){
+                API.moderateDeleteChat(chatID);
+            }
+        }
+        for(var i = 0; i < killerBot.filters.beggerWords.length; i++){
+            if(msg.indexOf(killerBot.filters.beggerWords[i].toLowerCase()) > -1 && killerBot.settings.beggerFilter){
+                API.moderateDeleteChat(chatID);
+            }
+        }
+
+    });
+
+    API.on(API.CHAT, function(data){
+        msg = data.message.toLowerCase(), chatID = data.chatID, fromID = data.fromID;
+        if(killerBot.misc.ready || killerBot.admins.indexOf(fromID) > -1 ||API.getUser(fromID).permission > 1){
+            if(msg.indexOf(':eyeroll:') > -1){
+                API.sendChat('/me ¬_¬');
+                if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                    killerBot.misc.ready = false;
+                    setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
                 }
             }
-            msg = msg.substring(0, msg.length - 2);
-            return API.sendChat(msg)
-        };
-        return commandsCommand
-    })(Command);
-    cmds = [f, afksCommand, skipCommand, dieCommand, commandsCommand];
-    chatCommandDispatcher = function (a) {
-        var c, cmd, _i, _len, _results;
-        chatUniversals(a);
-        _results = [];
-        for (_i = 0; _i < cmds.length; _i++) {
-            cmd = cmds[_i];
-            c = new cmd(a);
-            if (c.evalMsg()) {
-                break
-            } else {
-                _results.push(void 0)
-            }
-        }
-        return _results
-    };
-    updateVotes = function (a) {
-        data.currentwoots = a.positive;
-        data.currentmehs = a.negative;
-        data.currentcurates = a.curates
-    };
-    announceCurate = function (a) {};
-    handleUserJoin = function (a) {
-        data.userJoin(a);
-        data.users[a.id].updateActivity();
-        return API.sendChat("Hello  @" + a.username + ", I'm a Easy bot from http://autowoot.itoffice.sk")
-    };
-    handleNewSong = function (b) {
-        var c;
-        data.intervalMessages();
-        if (data.currentsong === null) {
-            data.newSong()
-        } else {
-            data.newSong();
-            var d = 0;
-            var e = 0
-        } if (data.forceSkip) {
-            c = b.media.id;
-            return setTimeout(function () {
-                var a;
-                a = API.getMedia();
-                if (a.id === c) {
-                    return API.moderateForceSkip()
+            if(msg.indexOf(':notamused:') > -1){
+                API.sendChat('/me ಠ_ಠ');
+                if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                    killerBot.misc.ready = false;
+                    setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
                 }
-            }, b.media.duration * 1000)
-        }
-    };
-    handleVote = function (a) {
-        var b = b++;
-        data.users[a.user.id].updateActivity();
-        return data.users[a.user.id].updateVote(a.vote)
-    };
-    handleUserLeave = function (a) {
-        var b, i, u, _i, _len, _ref31;
-        b = {
-            id: a.id,
-            time: new Date(),
-            songCount: data.songCount
-        };
-        i = 0;
-        _ref31 = data.internalWaitlist;
-        for (_i = 0; _i < _ref31.length; _i++) {
-            u = _ref31[_i];
-            if (u.id === a.id) {
-                b['waitlistPosition'] = i - 1;
-                data.setInternalWaitlist();
-                break
-            } else {
-                i++
             }
-        }
-        data.userDisconnectLog.push(b);
-        return data.users[a.id].inRoom(false)
-    };
-    antispam = function (a) {
-        var b, sender;
-        b = /(\bhttps?:\/\/(www.)?plug\.dj[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-        plugRoomLinkPatt2 = /(\b(www.)?plug\.dj[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-        if ((b.exec(a.message)) || (plugRoomLinkPatt2.exec(a.message))) {
-            sender = API.getUser(a.fromID);
-            if (!sender.ambassador && !sender.moderator && !sender.owner && !sender.superuser) {
-                if (!data.users[a.fromID]["protected"]) {
-                    API.sendChat("Spam detected!");
-                    return API.moderateDeleteChat(a.chatID)
-                } else {
-                    return API.sendChat("huh...")
+            if(msg.indexOf(':yuno:') > -1){
+                API.sendChat('/me ლ(ಥ益ಥლ');
+                if(killerBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                    killerBot.misc.ready = false;
+                    setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
                 }
             }
         }
-    };
-    beggar = function (a) {
-        var b, r, responses;
-        b = a.message.toLowerCase()
-    };
-    chatUniversals = function (a) {
-        data.activity(a);
-        antispam(a);
-        return beggar(a)
-    };
-    hook = function (a, b) {
-        return API.on(a, b)
-    };
-    unhook = function (a, b) {
-        return API.off(a, b)
-    };
-    apiHooks = [{
-        'event': API.ROOM_SCORE_UPDATE,
-        'callback': updateVotes
-    }, {
-        'event': API.CURATE_UPDATE,
-        'callback': announceCurate
-    }, {
-        'event': API.USER_JOIN,
-        'callback': handleUserJoin
-    }, {
-        'event': API.DJ_ADVANCE,
-        'callback': handleNewSong
-    }, {
-        'event': API.VOTE_UPDATE,
-        'callback': handleVote
-    }, {
-        'event': API.CHAT,
-        'callback': chatCommandDispatcher
-    }, {
-        'event': API.USER_LEAVE,
-        'callback': handleUserLeave
-    }];
-    initHooks = function () {
-        var a, _i, _len, _results;
-        _results = [];
-        for (_i = 0; _i < apiHooks.length; _i++) {
-            a = apiHooks[_i];
-            _results.push(hook(a['event'], a['callback']))
+
+    });
+	
+	API.on(API.CHAT, function(data){
+        msg = data.message.toLowerCase(), chatID = data.chatID, fromID = data.fromID;
+        if(killerBot.misc.ready || killerBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+            if(msg.indexOf('hello bot') !== -1 || msg.indexOf('bot hello') !== -1 || msg.indexOf('hi bot') !== -1 || msg.indexOf('bot hi') !== -1 || msg.indexOf('sup bot') !== -1 || msg.indexOf('bot sup') !== -1 || msg.indexOf('hey bot') !== -1 || msg.indexOf('bot hey') !== -1 || msg.indexOf('hi bot') !== -1 || msg.indexOf('bot howdy') !== -1 || msg.indexOf('aye bot') !== -1 || msg.indexOf('yo bot') !== -1 || msg.indexOf('waddup bot') !== -1 || msg.indexOf('bot waddup') !== -1){
+                var HelloMsg = ["Hey!","Oh hey there!","Good day sir!","Hi","Howdy!","Waddup!"];
+                API.sendChat("@" + data.from + " " + HelloMsg[Math.floor(Math.random() * HelloMsg.length)]);
+                    killerBot.misc.ready = false;
+                    setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                }
+            
         }
-        return _results
-    };
-    undoHooks = function () {
-        var a, _i, _len, _results;
-        _results = [];
-        for (_i = 0; _i < apiHooks.length; _i++) {
-            a = apiHooks[_i];
-            _results.push(unhook(a['event'], a['callback']))
+        if(killerBot.misc.ready || killerBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+            if(msg.indexOf("how are you bot") !== -1 || msg.indexOf("bot how are you") !== -1 || msg.indexOf("hru bot") !== -1 || msg.indexOf("bot hru") !== -1 || msg.indexOf("doing good bot?") !== -1 || msg.indexOf("bot doing good?") !== -1 || msg.indexOf("hows it going bot") !== -1 || msg.indexOf("bot how is it going") !== -1 || msg.indexOf("how you doing bot") !== -1 || msg.indexOf("bot how you doing") !== -1){
+                var HRUMsg = ["I'm good thanks for asking :)","Doing great yo and yourself?","All Good Mate!","I'm good thanks for asking!","Yeee i'm cool and youself yo?"];
+                API.sendChat("@" + data.from + " " + HRUMsg[Math.floor(Math.random() * HRUMsg.length)]);
+                    killerBot.misc.ready = false;
+                    setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                }
         }
-        return _results
-    };
-    initialize()
-}).call(this);
+        if(killerBot.misc.ready || killerBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+            if(msg.indexOf("ty bot") !== -1 || msg.indexOf("bot ty") !== -1 || msg.indexOf("thank you bot") !== -1 || msg.indexOf("bot thank you") !== -1 || msg.indexOf("thanks bot") !== -1 || msg.indexOf("bot thanks") !== -1 || msg.indexOf("thx bot") !== -1 || msg.indexOf("bot thx") !== -1){
+                var TYMsg = ["You're welcome! :D","Your always welcome bro!","No prob man.."];
+                API.sendChat("@" + data.from + " " + TYMsg[Math.floor(Math.random() * TYMsg.length)]);
+                    killerBot.misc.ready = false;
+                    setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                }
+        }
+        if(killerBot.misc.ready || killerBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+            if(msg.indexOf("ily bot") !== -1 || msg.indexOf("bot ily") !== -1 || msg.indexOf("i love you bot") !== -1 || msg.indexOf("bot i love you") !== -1 || msg.indexOf("i luv you bot") !== -1 || msg.indexOf("bot i luv you") !== -1 || msg.indexOf("i luv u bot") !== -1 || msg.indexOf("bot i luv u") !== -1 || msg.indexOf("i luv you bot") !== -1 || msg.indexOf("i love you more bot") !== -1){
+                var LoveMsg = [" I love you too baby!","I love you too ;).....   Sex?... JK =3","I love you too o.0","Sweet.. Love you to ;)"];
+                API.sendChat("@" + data.from + " " + LoveMsg[Math.floor(Math.random() * LoveMsg.length)]);
+                    killerBot.misc.ready = false;
+                    setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                }
+        }
+        if(killerBot.misc.ready || killerBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+            if(msg.indexOf("fuck you bot") !== -1 || msg.indexOf("I hate you bot") !== -1 || msg.indexOf("Stupid bot") !== -1 || msg.indexOf("bot fuck you") !== -1 || msg.indexOf("f u bot") !== -1 || msg.indexOf("bot f u") !== -1 || msg.indexOf("fuhk yuh bot") !== -1 || msg.indexOf("bot fuhk you") !== -1){
+                var FuckMsg = ["Sonny Boi watch what you are saying to me...","Did you're mom teach you to swear like that?","< Test f*** >.. Sorry 0% effs were given by me."];
+                API.sendChat("@" + data.from + " " + FuckMsg[Math.floor(Math.random() * FuckMsg.length)]);
+                    killerBot.misc.ready = false;
+                    setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                }
+        }        
+        if(killerBot.misc.ready || killerBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+            if(msg.indexOf("son of a bitch bot") !== -1 || msg.indexOf("bot son of a bitch") !== -1 || msg.indexOf("soab bot") !== -1 || msg.indexOf("bot soab") !== -1 || msg.indexOf("son of a biatch bot") !== -1 || msg.indexOf("bot son of a biatch") !== -1){
+                var FuckMsg = ["Nah.. Actually im the son of Bender.","What you just said you no-good, rat-bastard human, die in a fire. :)","< Test f*** >.. Sorry 0% f*** were given by me.","http://stream1.gifsoup.com/webroot/animatedgifs/980837_o.gif"];
+                API.sendChat("@" + data.from + " " + FuckMsg[Math.floor(Math.random() * FuckMsg.length)]);
+                    killerBot.misc.ready = false;
+                    setTimeout(function(){ killerBot.misc.ready = true; }, killerBot.settings.cooldown * 1000);
+                }
+        }
+        
+    });
+	
+    API.on(API.DJ_ADVANCE, DJ_ADVANCE);
+    function DJ_ADVANCE(data){
+        if(killerBot.settings.ruleSkip && typeof ruleSkip[data.media.id] != "undefined"){
+            switch(ruleSkip[data.media.id].rule){
+                case '1':
+                    API.sendChat('@'+data.dj.username+'Welcome to the swag-craft radio!');
+                    botMethods.skip();
+                    break;
+                case '2':
+                    API.sendChat('@'+data.dj.username+' No full or repetitive partial nudity, racism, derogatory or defamatory images or statements.');
+                    botMethods.skip();
+                    break;
+                case '3':
+                    API.sendChat('@'+data.dj.username+' No overly excessive/repetitive swearing in music/videos.');
+                    botMethods.skip();
+                    break;
+                case '13':
+                    API.sendChat('@'+data.dj.username+' No compilation videos. Mashups/remixes are allowed.');
+                    botMethods.skip();
+                    break;
+                case '14':
+                    API.sendChat('@'+data.dj.username+' No tracks longer than 5 minutes maximum (this is subject to change during busy times, at the discretion of the staff).');
+                    botMethods.skip();
+                    break;
+				case '35':
+                    API.sendChat('@'+data.dj.username+' Please do not play recently played tracks (check the history button before reaching the DJ booth). Any tracks that have been played within the last history will be skipped.');
+                    botMethods.skip();
+                    break;
+                case '99':
+                    API.sendChat('@'+data.dj.username+' Just no..');
+                    botMethods.skip();
+                    break;
+                default:
+                    API.sendChat('@'+data.dj.username+' '+ruleSkip[data.media.id].rule);
+                    botMethods.skip();
+                    break;
+            }
+        }
+        $.getJSON('http://gdata.youtube.com/feeds/api/videos/'+data.media.cid+'?v=2&alt=jsonc&callback=?', function(json){response = json.data});
+        setTimeout(function(){
+            if(typeof response === 'undefined' && data.media.format != 2 && killerBot.settings.removedFilter){
+                API.sendChat('/me This video may be unavailable!!');
+                //botMethods.skip();
+            }
+        }, 1500);
+
+        cancel = false;
+    }
+
+
+    botMethods.loadStorage();
+    console.log("Running SwagBot User Shell version " + killerBot.misc.version);
+
+    setTimeout(function(){
+        $.getScript('http://connect.soundcloud.com/sdk.js');
+    }, 1000);
+
+    setTimeout(function(){
+        SC.initialize({
+            client_id: 'eae62c8e7a30564e9831b9e43f1d484a'
+        });
+    }, 3000);
+
+    API.sendChat('/me Running SwagBot '+killerBot.misc.version)
