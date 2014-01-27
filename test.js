@@ -69,7 +69,37 @@ var blockedArtists = [
     "2Chainz",
     "Canuco Zumby",
 ];
+swagbot.misc.ball = [" It is certain",
+" It is decidedly so",
+" Without a doubt",
+" Yes definitely",
+" You may rely on it",
+" As I see it yes",
+" Most likely",
+" Outlook good",
+" Yes",
+" Signs point to yes :trollface:",
+" Reply hazy try again",
+" Ask again later",
+" Better not tell you now",
+" Cannot predict now",
+" Concentrate and ask again",
+" Don't count on it",
+" My reply is no",
+" My sources say no",
+" Outlook not so good",
+" Very doubtful"];
+swagbot.misc.ht = ["My magic coins says: Tails", "My magic coin says: Heads"];
 
+swagbot.misc.roll = [
+"You rolled A 1. Bummer :(",
+"You rolled A 2. Bummer :(",
+"You rolled A 3. Bummer :("];
+
+swagbot.misc.roll2 = [
+"4. Awesome!",
+"5. Awesome!",
+"6. Awesome!"];
 
 swagbot.misc.tacos = ["crispy taco","mexican taco","vegetarian taco","spicy taco","meatlover taco","cheese taco","wet hamburger","taco shell","delicious taco","gross taco"];
 
@@ -227,7 +257,7 @@ API.moderateDeleteChat(data.chatID);
                         }
                         break;
     case "say":
-                    if(API.getUser(fromID).permission > 1 || Funbot.admins.indexOf(fromID) > -1){
+                    if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
                         if(typeof command[1] === "undefined"){
                             }else{
                             API.sendChat(command[1]);
@@ -254,6 +284,71 @@ API.moderateDeleteChat(data.chatID);
                         if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
                             swagbot.misc.ready = false;
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                        }
+                        break;
+                     case "flipcoin":
+                        if(typeof command[1] == "undefined"){
+                            var crowd = API.getUsers();
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomHt = Math.floor(Math.random() * swagbot.misc.ht.length);
+                            var randomSentence = Math.floor(Math.random() * 1);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat(swagbot.misc.ht[randomHt]);
+                                    break;
+                                case 1:
+                                    API.sendChat(swagbot.misc.ht[randomHt]);
+                                    break;
+                            }
+                        }else{
+                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
+                            var randomHt = Math.floor(Math.random() * swagbot.misc.ht.length);
+                            var randomSentence = Math.floor(Math.random() * 1);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat(swagbot.misc.ht[randomHt]);
+                                    break;
+                                case 1:
+                                    API.sendChat(swagbot.misc.ht[randomHt]);
+                                    break;
+                           }
+                        }
+                        if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            swagbot.misc.ready = false;
+                            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                        }
+                        break;
+ 
+                     case "8ball":
+                        if(typeof command[1] == "undefined"){
+                            var crowd = API.getUsers();
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomBall = Math.floor(Math.random() * swagbot.misc.ball.length);
+                            var randomSentence = Math.floor(Math.random() * 1);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("@" + data.from + ", "+ swagbot.misc.ball[randomBall]);
+                                    break;
+                                case 1:
+                                    API.sendChat("@" + data.from + ", "+ swagbot.misc.ball[randomBall]);
+                                    break;
+                            }
+                        }else{
+                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
+                            var randomBall = Math.floor(Math.random() * swagbot.misc.ball.length);
+                            var randomSentence = Math.floor(Math.random() * 1);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("@" + data.from + ", "+ swagbot.misc.ball[randomBall]);
+                                    break;
+                                case 1:
+                                    API.sendChat("@" + data.from + ", "+ swagbot.misc.ball[randomBall]);
+                                    break;
+                           }
+                        }
+                        if(mubBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            mubBot.misc.ready = false;
+                            setTimeout(function(){ mubBot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
                         break;
 /*
@@ -303,11 +398,11 @@ API.moderateDeleteChat(data.chatID);
                                     */
                     case "commands":
                         if(typeof command[1] == "undefined"){
-                            API.sendChat("User Commands - rules | theme | help | linkify | songlink  cookie | hug | djinfo | marco | slap | residentdj | bouncer | manager | host | brandambassador");
+                            API.sendChat("User Commands - rules | help | songlink | cookie | hug | djinfo | marco | slap");
                         }else if(command[1].indexOf("@") > -1){
-                            API.sendChat(command[1]+"User Commands - rules | theme | help | linkify | songlink  cookie | hug | djinfo | marco | slap | residentdj | bouncer | manager | host | brandambassador");
+                            API.sendChat("User Commands - rules | help | songlink | cookie | hug | djinfo | marco | slap");
                         }else{
-                            API.sendChat("User Commands - rules | theme | help | linkify | songlink  cookie | hug | djinfo | marco | slap | residentdj | bouncer | manager | host | brandambassador");
+                            API.sendChat("User Commands - rules | help | songlink | cookie | hug | djinfo | marco | slap");
                         }
                         if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
                             swagbot.misc.ready = false;
