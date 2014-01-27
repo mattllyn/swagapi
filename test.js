@@ -435,9 +435,9 @@ API.moderateDeleteChat(data.chatID);
                                     break;
                            }
                         }
-                        if(mubBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            mubBot.misc.ready = false;
-                            setTimeout(function(){ mubBot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                        if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            swagbot.misc.ready = false;
+                            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
                         break;
                        case "fortune":
