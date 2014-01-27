@@ -634,6 +634,14 @@ case "votes":
                         }
                     }
                         break;
+                case "add":
+                    if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
+                        if(typeof command[1] === "undefined"){
+                            $(".icon-curate").click();
+                            $($(".curate").children(".menu").children().children()[0]).mousedown();
+                        }
+                    }
+                        break;
 						
 /*
                     case "autowoot":
