@@ -1323,5 +1323,3 @@ API.moderateDeleteChat(data.chatID);
             client_id: 'eae62c8e7a30564e9831b9e43f1d484a'
         });
     }, 3000);
-
-    API.sendChat('/me Running SwagBot '+swagbot.misc.version)
