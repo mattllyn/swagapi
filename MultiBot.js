@@ -110,7 +110,7 @@ var BOT = {
             BOT.sendAlert("I'm now running!");
         },
             close: function(e) {
-            BOT.sendAlert("Bye, Bye!");
+            BOT.sendAlert("Reloading!");
             console.log('Removing TempBans');
             var users = BOT.INTERNAL.allUsers;
             var bans = BOT.INTERNAL.tempBans;
