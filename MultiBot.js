@@ -131,16 +131,7 @@ var BOT = {
             css += '.botButton.on{background:#32CD32;} .botButton.off{background:#CF0000;}.botButton span{font-size: 16px;}';
             $('body').append('<style class="botelement">' + css + '</style>');
             
-            BOT.addCommand('reload', function(args, user){
-                BOT.sendAlert('Cover me, I\'m reloading!'); BOT_reload();
-            }, API.ROLE.MANAGER);
-            BOT.addCommand('plugins', function(args, user){
-                var pl = ''; var p = BOT.INTERNAL.plugins;
-                for(var pp = 0; pp < p.length; pp++) {pl += ', ' + p[pp];}
-                BOT.sendMessage('MultiBot Plugins: ' + pl.substring(2), user);
-            }, API.ROLE.BOUNCER);
-            
-            var users = API.getUsers(); for(var i = 0; i < users.length; i++)
+           var users = API.getUsers(); for(var i = 0; i < users.length; i++)
                 BOT.INTERNAL.allUsers[BOT.INTERNAL.allUsers.length] = users[i]['id'];
             
             API.on(API.USER_JOIN, BOT.INTERNAL.join);
