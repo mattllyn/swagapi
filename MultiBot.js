@@ -107,10 +107,10 @@ var BOT = {
             API.on(API.WAIT_LIST_UPDATE, BOT.INTERNAL.waitlist);
             BOT.registerJqueryEvent($(window).bind('beforeunload', BOT.INTERNAL.close));
 // WAIT TO ENABLE ALL PLUGINS & MODULES
-            BOT.sendAlert("");
+            BOT.sendAlert("Booting up!");
         },
             close: function(e) {
-            BOT.sendAlert("");
+            BOT.sendAlert("Shutting down!");
             console.log('Removing TempBans');
             var users = BOT.INTERNAL.allUsers;
             var bans = BOT.INTERNAL.tempBans;
