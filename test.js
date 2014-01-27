@@ -539,11 +539,11 @@ API.moderateDeleteChat(data.chatID);
                                     */
                     case "commands":
                         if(typeof command[1] == "undefined"){
-                            API.sendChat("User Commands - Rules | Roll | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | djinfo | marco | slap");
+              API.sendChat("User Commands -| Rules | Roll | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }else if(command[1].indexOf("@") > -1){
-                          ("User Commands - Rules | Roll | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | djinfo | marco | slap");
+                          ("User Commands -| Rules | Roll | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }else{
-                          ("User Commands - Rules | Roll | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | djinfo | marco | slap");
+                          ("User Commands -| Rules | Roll | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }
                         if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
                             swagbot.misc.ready = false;
