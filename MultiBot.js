@@ -149,9 +149,7 @@ var BOT = {
             BOT.registerJqueryEvent($(window).bind('beforeunload', BOT.INTERNAL.close));
 
             // WAIT TO ENABLE ALL PLUGINS & MODULES
-            BOT.sendAlert("I'm now running!"); BOT.INTERNAL.setMode(true);
-        },
-        close: function(e) {
+            close: function(e) {
             BOT.sendAlert("Bye, Bye!");
             console.log('Removing TempBans');
             var users = BOT.INTERNAL.allUsers;
