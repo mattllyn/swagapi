@@ -33,9 +33,9 @@ function syncAfk() {
         var l = BOT.INTERNAL.lastMessageTime[u['id']];
         if(isUndefined(l)) {BOT.INTERNAL.lastMessageTime[u['id']] = now;l = now;}
         if((API.getWaitListPosition(u['id']) != -1) && (l + afkWLMS < now)) {
-            API.moderateRemoveDJ(u['id']);
+           // API.moderateRemoveDJ(u['id']);
         } else if(l + (afkMS + cdMS) < now) {
-            BOT.kick(u, API.getUser());
+           // BOT.kick(u, API.getUser());
         } else if(l + afkMS < now) {
             if(afkAnounce[u['id']] == false) {
                 API.sendChat('@'+u['username']+' you are afk. Chat in '+afkCountdown+' minutes or I\'ll kick you');
