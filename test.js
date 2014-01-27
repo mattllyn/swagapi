@@ -1191,7 +1191,7 @@ case "votes":
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
                         break;
-
+/*
         case "punish":
           if(typeof command[1] == "@"){
             var crowd = API.getUsers();
@@ -1253,6 +1253,7 @@ case "votes":
             swagbot.misc.ready = false;
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
+          */
                     case "cookie":
                         if(typeof command[1] == "undefined"){
                             var crowd = API.getUsers();
