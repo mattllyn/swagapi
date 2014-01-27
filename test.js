@@ -173,12 +173,17 @@ swagbot.pubVars.command = false;
 
 Array.prototype.remove=function(){var c,f=arguments,d=f.length,e;while(d&&this.length){c=f[--d];while((e=this.indexOf(c))!==-1){this.splice(e,1)}}return this};
 
+ 
 API.on(API.DJ_ADVANCE, djAdvanceEvent);
+ 
 API.on(API.USER_JOIN, UserJoin);
 function UserJoin(user)
 {
-API.sendChat("@" + user.username + " has joined the room.");
+var JoinMsg = ["@user has jonied!","welcome @user!","Hey there @user!","Glad you came by @user"];
+r = Math.floor(Math.random() * JoinMsg.length);
+API.sendChat(JoinMsg[r].replace("user", user.username));
 }
+ 
 
 function djAdvanceEvent(data){
     setTimeout(function(){ botMethods.djAdvanceEvent(data); }, 500);
@@ -747,7 +752,6 @@ case "votes":
             }
             if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
                 switch(command[0].toLowerCase()){
-                   // commented out because the bot isn't running on a dedicated bot account
                      case "meh":
                      if(API.getUser(data.fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1) $("#meh").click();
                      break;
@@ -756,11 +760,11 @@ case "votes":
                      if(API.getUser(data.fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1)  $("#woot").click();
                      break;
 
-                    case "skip":
-                    if(API.getUser(data.fromID).permission > 1){
-                        if(typeof command[1] === "undefined"){
-                            API.moderateForceSkip();
-							API.moderateDeleteChat(data.chatID);
+                     case "skip":
+                     if(API.getUser(data.fromID).permission > 1){
+                     if(typeof command[1] === "undefined"){
+                     API.moderateForceSkip();
+	API.moderateDeleteChat(data.chatID);
                         }else{
                             API.sendChat('@'+API.getDJs()[0].username+' '+command[1]);
                             API.moderateForceSkip();
