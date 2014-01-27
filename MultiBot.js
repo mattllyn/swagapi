@@ -107,7 +107,7 @@ var BOT = {
             API.on(API.WAIT_LIST_UPDATE, BOT.INTERNAL.waitlist);
             BOT.registerJqueryEvent($(window).bind('beforeunload', BOT.INTERNAL.close));
 // WAIT TO ENABLE ALL PLUGINS & MODULES
-            BOT.sendAlert("I'm now running!"); BOT.INTERNAL.setMode(true);
+            BOT.sendAlert("I'm now running!");
         },
             close: function(e) {
             BOT.sendAlert("Bye, Bye!");
