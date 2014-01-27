@@ -132,6 +132,7 @@ var BOT = {
             $('body').append('<style class="botelement">' + css + '</style>');
             
             
+            
             var users = API.getUsers(); for(var i = 0; i < users.length; i++)
                 BOT.INTERNAL.allUsers[BOT.INTERNAL.allUsers.length] = users[i]['id'];
             
@@ -140,8 +141,7 @@ var BOT = {
             API.on(API.WAIT_LIST_UPDATE, BOT.INTERNAL.waitlist);
             BOT.registerJqueryEvent($(window).bind('beforeunload', BOT.INTERNAL.close));
 
-            // WAIT TO ENABLE ALL PLUGINS & MODULES
-           close: function(e) {
+            lose: function(e) {
             BOT.sendAlert("Bye, Bye!");
             console.log('Removing TempBans');
             var users = BOT.INTERNAL.allUsers;
