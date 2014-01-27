@@ -352,6 +352,15 @@ API.moderateDeleteChat(data.chatID);
                         }
                         break;
 
+        case "facebook":
+        case "fb":
+          if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
+            API.sendChat(data.from +"Please join our facebook group here: www.facebook.com/swagcraftmc");
+            swagbot.misc.ready = false;
+            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+          }
+          break;
+
                     case "rules":
                         if(typeof command[1] == "undefined"){
                             API.sendChat("Room Rules - 1.Do not play troll songs 2.Do not ask for ranks 3.Don\'t spam 4.No Advertising rooms, websites, etc.. 5.No songs over 5 minutes unless aproved by a mod 6.Dont spam dislike peoples videos, or you will be banned.");
@@ -614,7 +623,69 @@ case "votes":
                             swagbot.misc.ready = false;
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
-                        break;
+                        break;case "punish":
+          if(typeof command[1] == "@"){
+            var crowd = API.getUsers();
+            var randomUser = Math.floor(Math.random() * crowd.length);
+            var randomSentence = Math.floor(Math.random() * 6);
+            switch(randomSentence){
+              case 0:
+                API.sendChat("/me rubs sandpaper on @"+command[1]+"'s scrotum");
+                break;
+              case 1:
+                API.sendChat("/me penetrates @"+command[1]+" with a sharpie");
+                break;
+              case 2:
+                API.sendChat("/me pokes @"+command[1]+" in the eyes");
+                break;
+              case 3:
+                API.sendChat("/me makes @"+command[1]+"'s mother cry");
+                break;
+              case 4:
+                API.sendChat("/me pinches @"+command[1]+"'s nipples super hard");
+                break;
+              case 5:
+                API.sendChat("/me gives @"+command[1]+" a wet willy");
+                break;
+
+              case 6:
+                API.sendChat("/me Sets @"+command[1]+" hair on fire");
+                break;
+            }
+          }else{
+            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
+            var randomSentence = Math.floor(Math.random() * 6);
+            switch(randomSentence){
+              case 0:
+                API.sendChat("/me rubs sandpaper on @"+command[1]+"'s scrotum");
+                break;
+              case 1:
+                API.sendChat("/me penetrates @"+command[1]+" with a sharpie");
+                break;
+              case 2:
+                API.sendChat("/me pokes @"+command[1]+" in the eyes");
+                break;
+              case 3:
+                API.sendChat("/me makes @"+command[1]+"'s mother cry");
+                break;
+              case 4:
+                API.sendChat("/me pinches @"+command[1]+"'s nipples super hard");
+                break;
+              case 5:
+                API.sendChat("/me gives @"+command[1]+" a wet willy");
+                break;
+
+              case 6:
+                API.sendChat("/me Sets @"+command[1]+" hair on fire");
+                break;
+            }
+          }
+          if(Countrybot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+            Countrybot.misc.ready = false;
+            setTimeout(function(){ Countrybot.misc.ready = true; }, Countrybot.settings.cooldown * 1000);
+          }
+          break;
+          break;
 					
 					case "bitchslap":
                 case "slap":
@@ -1120,6 +1191,68 @@ case "votes":
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
                         break;
+
+        case "punish":
+          if(typeof command[1] == "@"){
+            var crowd = API.getUsers();
+            var randomUser = Math.floor(Math.random() * crowd.length);
+            var randomSentence = Math.floor(Math.random() * 6);
+            switch(randomSentence){
+              case 0:
+                API.sendChat("/me rubs sandpaper on @"+command[1]+"'s scrotum");
+                break;
+              case 1:
+                API.sendChat("/me penetrates @"+command[1]+" with a sharpie");
+                break;
+              case 2:
+                API.sendChat("/me pokes @"+command[1]+" in the eyes");
+                break;
+              case 3:
+                API.sendChat("/me makes @"+command[1]+"'s mother cry");
+                break;
+              case 4:
+                API.sendChat("/me pinches @"+command[1]+"'s nipples super hard");
+                break;
+              case 5:
+                API.sendChat("/me gives @"+command[1]+" a wet willy");
+                break;
+
+              case 6:
+                API.sendChat("/me Sets @"+command[1]+" hair on fire");
+                break;
+            }
+          }else{
+            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
+            var randomSentence = Math.floor(Math.random() * 6);
+            switch(randomSentence){
+              case 0:
+                API.sendChat("/me rubs sandpaper on @"+command[1]+"'s scrotum");
+                break;
+              case 1:
+                API.sendChat("/me penetrates @"+command[1]+" with a sharpie");
+                break;
+              case 2:
+                API.sendChat("/me pokes @"+command[1]+" in the eyes");
+                break;
+              case 3:
+                API.sendChat("/me makes @"+command[1]+"'s mother cry");
+                break;
+              case 4:
+                API.sendChat("/me pinches @"+command[1]+"'s nipples super hard");
+                break;
+              case 5:
+                API.sendChat("/me gives @"+command[1]+" a wet willy");
+                break;
+
+              case 6:
+                API.sendChat("/me Sets @"+command[1]+" hair on fire");
+                break;
+            }
+          }
+          if(Countrybot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+            Countrybot.misc.ready = false;
+            setTimeout(function(){ Countrybot.misc.ready = true; }, Countrybot.settings.cooldown * 1000);
+          }
                     case "cookie":
                         if(typeof command[1] == "undefined"){
                             var crowd = API.getUsers();
