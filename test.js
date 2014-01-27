@@ -286,6 +286,7 @@ API.moderateDeleteChat(data.chatID);
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
                         break;
+                     case "flip":
                      case "flipcoin":
                         if(typeof command[1] == "undefined"){
                             var crowd = API.getUsers();
@@ -398,11 +399,11 @@ API.moderateDeleteChat(data.chatID);
                                     */
                     case "commands":
                         if(typeof command[1] == "undefined"){
-                            API.sendChat("User Commands - rules | help | songlink | cookie | hug | djinfo | marco | slap");
+                            API.sendChat("User Commands - rules | 8ball | flipcoin | help | songlink | cookie | hug | djinfo | marco | slap");
                         }else if(command[1].indexOf("@") > -1){
-                            API.sendChat("User Commands - rules | help | songlink | cookie | hug | djinfo | marco | slap");
+                           API.sendChat("User Commands - rules | 8ball | flipcoin | help | songlink | cookie | hug | djinfo | marco | slap");
                         }else{
-                            API.sendChat("User Commands - rules | help | songlink | cookie | hug | djinfo | marco | slap");
+                           API.sendChat("User Commands - rules | 8ball | flipcoin | help | songlink | cookie | hug | djinfo | marco | slap");
                         }
                         if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
                             swagbot.misc.ready = false;
@@ -1323,3 +1324,4 @@ API.moderateDeleteChat(data.chatID);
         });
     }, 3000);
 
+    API.sendChat('/me Running SwagBot '+swagbot.misc.version)
