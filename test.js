@@ -564,6 +564,13 @@ API.moderateDeleteChat(data.chatID);
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
                         break;
+case "votes":
+                        if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
+                        API.sendChat("Users vote:  :+1: " + API.getRoomScore().positive + " | :-1: " + API.getRoomScore().negative + " | :purple_heart: " + API.getRoomScore().curates);
+                            swagbot.misc.ready = false;
+                            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                        }
+                        break;
 						 /*
 					case "whymeh":
                         if(typeof command[1] == "undefined"){
