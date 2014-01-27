@@ -55,7 +55,13 @@
             mehs: 0,
             curates: 0
         };
-        
+        settings.prototype.pupScriptUrl = 'http://autowoot.itoffice.sk/bots/easy/easybot.js';
+        settings.prototype.afkTime = 12 * 60 * 1000;
+        settings.prototype.songIntervalMessages = [{
+            interval: 10,
+            offset: 0,
+            msg: 'Hello I\'m the Bot. Ask our serverteam.'
+        }];
         settings.prototype.songCount = 0;
         settings.prototype.startup = function () {
             this.launchTime = new Date();
@@ -164,7 +170,7 @@
                         "boothLocked": false,
                         "waitListEnabled": true,
                         "maxPlays": 1,
-                        "maxDJs": 50
+                        "maxDJs": 5
                     }]
                 }),
                 async: this.async,
@@ -283,9 +289,6 @@
         };
         return RoomHelper
     })();
-    pupOnline = function () {
-        return API.sendChat('Bot is active :+1:')
-    };
     populateUserData = function () {
         var u, users, _i, _len;
         users = API.getUsers();
@@ -661,7 +664,12 @@
         data.currentmehs = a.negative;
         data.currentcurates = a.curates
     };
-    
+    announceCurate = function (a) {};
+    handleUserJoin = function (a) {
+        data.userJoin(a);
+        data.users[a.id].updateActivity();
+        return API.sendChat("Hello  @" + a.username + ", I'm a Easy bot from http://autowoot.itoffice.sk")
+    };
     handleNewSong = function (b) {
         var c;
         data.intervalMessages();
