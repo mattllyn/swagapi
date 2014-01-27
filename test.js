@@ -183,7 +183,16 @@ API.sendChat("@" + user.username + " has joined the room.");
 function djAdvanceEvent(data){
     setTimeout(function(){ botMethods.djAdvanceEvent(data); }, 500);
 }
-
+function grab() {
+        $(".icon-curate").click();
+        $($(".curate").children(".menu").children().children()[0]).mousedown();
+        $('.pop-menu.curate .menu ul li').each(function() {
+        if($(this).children('span').text() == playlistName) {
+            $(this).mousedown();
+            djBotExecuting = false; return true;
+  }
+    });
+}
 API.on(API.CURATE_UPDATE, callback);
 function callback(obj)
 {
@@ -603,11 +612,27 @@ case "votes":
                         break;
 					
 					case "bitchslap":
-                    case "slap":
+                case "slap":
                         if(typeof command[1] == "undefined"){
                         API.sendChat("@"+ data.from +" just gave a huge slap to @"+ API.getDJ().username +" for playing this awful track!");
                         
                          }
+                        break;
+                        
+                case "join":
+                        if(swagbot.admins.indexOf(fromID) > -1 || swagbot.admins.indexOf(fromID) > -1){
+                        if(typeof command[1] === "undefined"){
+                            API.djJoin();
+                        }
+                    }
+                        break;
+ 
+                case "leave":
+                        if(swagbot.admins.indexOf(fromID) > -1 || swagbot.admins.indexOf(fromID) > -1){
+                        if(typeof command[1] === "undefined"){
+                            API.djLeave();
+                        }
+                    }
                         break;
 						
 /*
@@ -720,7 +745,7 @@ case "votes":
                      break;
                                
                      case "woot":
-                     if(API.getUser(data.fromID).permission > 1 || test.admins.indexOf(fromID) > -1)  $("#woot").click();
+                     if(API.getUser(data.fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1)  $("#woot").click();
                      break;
 
                     case "skip":
