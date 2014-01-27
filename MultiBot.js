@@ -95,41 +95,7 @@ var BOT = {
         this.INTERNAL.syncRelist();
     },
     
-    /* ******************************************** INTERNAL ******************************************** */
     
-    INTERNAL: {
-        inicialize: function() {
-            if($('body').length == 0) {BOT.registerTimer(setTimeout(function(){inicializeBot();}, 10000));return;}
-            $('body').css('background-image', 'none').css('background-color', '#E6E6E6');
-            $('#room').css('box-shadow', 'inset 0px 0px 10px rgba(0, 0, 0, 0.5), inset 0px 0px 150px rgba(0, 0, 0, 0.25)');
-            $('#room').css('font-family', '\'Open Sans\', sans-serif');
-            
-            $('#room #playback').remove(); $('#room #audience').remove(); $('#room #dj-booth').remove();
-            $('#room canvas').remove(); $('#room *').hide();
-            $('#room').append('<div id="botstatus" class="botelement">LOADING</div><div id="botpanel" class="botelement"></div>');
-            $('#botstatus').css({padding: '10px', borderRadius: '5px', textAlign: 'center', fontSize: '60px',
-                color: '#ffffff', boxShadow: 'inset 0px 0px 20px rgba(0, 0, 0, 0.1)', margin: '30px'});
-            $('#botpanel').css({margin: '0px 30px 0px 30px', color: '#333333'});
-            BOT.INTERNAL.setMode(false, 'LOADING');
-            
-            var bot = API.getUser();
-            if(bot['permission'] < API.ROLE.MANAGER) {
-                BOT.INTERNAL.setMode(false, 'NO PERMISSION');
-                $('#botpanel').append('<strong>' + bot['username'] + ' needs to be a Manager</strong><br><div style="height: 100%;"></div>');
-                return;
-            }
-            $('#room').css('overflow', 'auto');
-            $('#botpanel').append('<div style="text-align:center;">PlugDJ v'+VERSION+' - MultiBot v'+BOT.INTERNAL.VERSION+' developed by Guichaguri.<br><strong>Plugins</strong></div><br>');
-            $('#room').append('<div class="multibotinfo botelement" style="margin:30px;color:#333333;"><br><br><strong>Basic MultiBot Commands</strong><br><br><strong>!reload</strong> - Reload the Bot<br><strong>!plugins</strong> - List of Plugins</div>');
-            $('#chat-input').prepend('<input type="text" name="cmd" id="chatcmd" style="position:absolute;top:7px;left:10px;font-family:Roboto,sans-serif;' +
-                    'font-weight:400;font-size:12px;color:#EEE;background:transparent;width:305px;border:0;outline:0;" class="botelement" placeholder="Chat as the Bot">');
-            $('#chat-input-field').hide();
-            BOT.registerJqueryEvent($('#chatcmd').keydown(function(e) {
-                if(e.which == 13) {BOT.chatCommand($(this).val());$(this).val('');}
-            }));
-            var css = '.botButton{display:inline-block;font-size:150%;color:#fff;border-radius:5px;margin:5px;padding:5px 10px 5px 10px;box-shadow:inset 0px 0px 20px rgba(0, 0, 0, 0.1);}';
-            css += '.botButton.on{background:#32CD32;} .botButton.off{background:#CF0000;}.botButton span{font-size: 16px;}';
-            $('body').append('<style class="botelement">' + css + '</style>');
             
             var users = API.getUsers(); for(var i = 0; i < users.length; i++)
                 BOT.INTERNAL.allUsers[BOT.INTERNAL.allUsers.length] = users[i]['id'];
