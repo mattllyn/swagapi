@@ -1323,4 +1323,3 @@ API.moderateDeleteChat(data.chatID);
         });
     }, 3000);
 
-    API.sendChat('/me Running SwagBot '+swagbot.misc.version)
