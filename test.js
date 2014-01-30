@@ -1515,7 +1515,7 @@ case "votes":
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                 }
             }
-            if(msg.indexOf('Help Bot') > -1){
+            if(msg.indexOf('help bot') > -1){
                 API.sendChat('/me Have you tried, !Help or !rules ?');
                 if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
                     swagbot.misc.ready = false;
