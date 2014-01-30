@@ -27,7 +27,8 @@ BOT.addCommand('lastmsg', cmdLastMsg, API.ROLE.BOUNCER);
 
 BOT.setPluginStatus('Basic Commands', true);
 
-function cmdLastMsg(args, user) {
+function cmdLastMsg(args, user)
+if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){ {
     if(args.length == 0) return false;
     var u = BOT.getUserByName(args[0]);
     var time = BOT.INTERNAL.lastMessageTime[u['id']]; var current = new Date().getTime();
@@ -46,7 +47,7 @@ function cmdBan(args, user) {
 }
 function cmdLockskip(args, user) {
     API.moderateForceSkip();
-    BOT.sendMessage('Skipped the DJ, but the DJ will be relisted to position 3', user);
+    BOT.sendMessage('Skipped the DJ, but the DJ will be relisted to position 1', user);
     BOT.relistUser(user, 1);
 }
 function cmdPing(args, user) {
