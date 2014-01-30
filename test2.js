@@ -1,90 +1,53 @@
-// BasicCommands
-// @author Guichaguri
-
-var BC_desc = 'Basic Commands for your Bot!<br><br>';
-BC_desc += '<strong>Commands</strong><br><br>';
-BC_desc += '<strong>!ban [user] [time in minutes]</strong> - Ban a user (If the bot turn off or reload, all bans will be removed)<br>';
-BC_desc += '<strong>!kick [user]</strong> - Kick a user<br>';
-BC_desc += '<strong>!mute [user] [seconds]</strong> - Mute a user<br>';
-BC_desc += '<strong>!ping</strong> - Ping the Bot<br>';
-BC_desc += '<strong>!say [message]</strong> - Says a message<br>';
-BC_desc += '<strong>!autowoot</strong> - Toggle AutoWoot mode<br>';
-BC_desc += '<strong>!link</strong> - Link for this music<br>';
-BC_desc += '<strong>!lockskip</strong> - Skip the DJ and set the DJ to the position 3 on the waitlist<br>';
-BC_desc += '<strong>!lastmsg [user]</strong> - Check the time of the last message from the user<br>';
-BOT.setPluginInfos('Basic Commands', BC_desc, '1.0', 'Guichaguri');
-BOT.setPluginStatus('Basic Commands', false);
-
-BOT.addCommand('ban', cmdBan, API.ROLE.MANAGER);
-BOT.addCommand('kick', cmdKick, API.ROLE.BOUNCER);
-BOT.addCommand('mute', cmdMute, API.ROLE.BOUNCER);
-BOT.addCommand('say', cmdSay, API.ROLE.MANAGER);
-BOT.addCommand('ping', cmdPing, API.ROLE.BOUNCER);
-BOT.addCommand('autowoot', cmdAutoWoot, API.ROLE.MANAGER);
-BOT.addCommand('link', cmdLink, API.ROLE.NONE);
-BOT.addCommand('lockskip', cmdLockskip, API.ROLE.MANAGER);
-BOT.addCommand('lastmsg', cmdLastMsg, API.ROLE.BOUNCER);
-
-BOT.setPluginStatus('Basic Commands', true);
-
-function cmdLastMsg(args, user) {
-    if(args.length == 0) return false;
-    var u = BOT.getUserByName(args[0]);
-    var time = BOT.INTERNAL.lastMessageTime[u['id']]; var current = new Date().getTime();
-    var d = (current - time) / 1000; var t = 'seconds';
-    if(d > 60) {d = d / 60; t = 'minutes'; if(d > 60) {d = d / 60; t = 'hours';} }
-    if(d == 1) {t = t.substring(0, -1);}
-    BOT.sendMessage('Last message from '+u['username']+' was ' + d + ' ' + t + ' ago', user);
-}
-function cmdBan(args, user) {
-    if(args.length < 2) {return false;}
-    var t = parseInt(args[1]);
-    if(isNaN(t)) return true;
-    var u = BOT.getUserByName(args[0]);
-    if(u == null) {return true;}
-    BOT.ban(u, user, t);
-}
-function cmdLockskip(args, user) {
-    API.moderateForceSkip();
-    BOT.sendMessage('Skipped the DJ, but the DJ will be relisted to position 3', user);
-    BOT.relistUser(user, 3);
-}
-function cmdPing(args, user) {
-    BOT.sendMessage('PONG!', user);
-}
-function cmdSay(args, user) {
-    if(args.length == 0) {return false;}
-    var a = ''; for(var i = 0; i < args.length; i++) {a += ' ' + args[i];}
-    a = a.substring(1); BOT.sendMessage(a, user);
-}
-function cmdKick(args, user) {
-    if(args.length == 0) {return false;}
-    var u = BOT.getUserByName(args[0]);
-    if(u == null) {return true;}
-    BOT.kick(u, user);
-}
-function cmdMute(args, user) {
-    if(args.length == 0) {return false;}
-    var u = BOT.getUserByName(args[0]); var t = 15;
-    if(u == null) {return true;}
-    if(args.length > 1) {t = toint(args[1]); if(t == null) t = 15;}
-    BOT.mute(u, user, t);
-}
-window['autowoot'] = null;
-function cmdAutoWoot(args, user) {
-    if(window['autowoot'] == null) {
-        window['autowoot'] = setInterval(function(){$('#woot').click();}, 1000 * 10);
-        BOT.registerInterval(window['autowoot']);
-        BOT.sendMessage('Autowoot was turned on', user);
-    } else {
-        clearInterval(window['autowoot']); window['autowoot'] = null;
-        BOT.sendMessage('Autowoot was turned off', user);
-    }
-}
-function cmdLink(args, user) {
-    var m = API.getMedia();
-    if(isUndefined(m)) return true;
-    if(m['format'] == 1) {
-        BOT.sendMessage('Link of this music: http://youtu.be/' + m['cid'], user);
-    }
-}
+API.on(API.CHAT, function(data){
+        msg = data.message.toLowerCase(), chatID = data.chatID, fromID = data.fromID;
+        if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+            if(msg.indexOf('hello bot') !== -1 || msg.indexOf('bot hello') !== -1 || msg.indexOf('hi bot') !== -1 || msg.indexOf('bot hi') !== -1 || msg.indexOf('sup bot') !== -1 || msg.indexOf('bot sup') !== -1 || msg.indexOf('hey bot') !== -1 || msg.indexOf('bot hey') !== -1 || msg.indexOf('hi bot') !== -1 || msg.indexOf('bot howdy') !== -1 || msg.indexOf('aye bot') !== -1 || msg.indexOf('yo bot') !== -1 || msg.indexOf('waddup bot') !== -1 || msg.indexOf('bot waddup') !== -1){
+                var HelloMsg = ["Hey!","Oh hey there!","Good day sir!","Hi","Howdy!","Waddup!"];
+                API.sendChat("@" + data.from + " " + HelloMsg[Math.floor(Math.random() * HelloMsg.length)]);
+                    swagbot.misc.ready = false;
+                    setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                }
+            
+        }
+        if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+            if(msg.indexOf("how are you bot") !== -1 || msg.indexOf("bot how are you") !== -1 || msg.indexOf("hru bot") !== -1 || msg.indexOf("bot hru") !== -1 || msg.indexOf("doing good bot?") !== -1 || msg.indexOf("bot doing good?") !== -1 || msg.indexOf("hows it going bot") !== -1 || msg.indexOf("bot how is it going") !== -1 || msg.indexOf("how you doing bot") !== -1 || msg.indexOf("bot how you doing") !== -1){
+                var HRUMsg = ["I'm good thanks for asking :)","Doing great yo and yourself?","All Good Mate!","I'm good thanks for asking!","Yeee i'm cool and youself yo?"];
+                API.sendChat("@" + data.from + " " + HRUMsg[Math.floor(Math.random() * HRUMsg.length)]);
+                    swagbot.misc.ready = false;
+                    setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                }
+        }
+        if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+            if(msg.indexOf("ty bot") !== -1 || msg.indexOf("bot ty") !== -1 || msg.indexOf("thank you bot") !== -1 || msg.indexOf("bot thank you") !== -1 || msg.indexOf("thanks bot") !== -1 || msg.indexOf("bot thanks") !== -1 || msg.indexOf("thx bot") !== -1 || msg.indexOf("bot thx") !== -1){
+                var TYMsg = ["You're welcome! :D","Your always welcome bro!","No prob man.."];
+                API.sendChat("@" + data.from + " " + TYMsg[Math.floor(Math.random() * TYMsg.length)]);
+                    swagbot.misc.ready = false;
+                    setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                }
+        }
+        if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+            if(msg.indexOf("ily bot") !== -1 || msg.indexOf("bot ily") !== -1 || msg.indexOf("i love you bot") !== -1 || msg.indexOf("bot i love you") !== -1 || msg.indexOf("i luv you bot") !== -1 || msg.indexOf("bot i luv you") !== -1 || msg.indexOf("i luv u bot") !== -1 || msg.indexOf("bot i luv u") !== -1 || msg.indexOf("i luv you bot") !== -1 || msg.indexOf("i love you more bot") !== -1){
+                var LoveMsg = [" I love you too baby!","I love you too ;)","I love you too o.0","Sweet.. Love you to ;)"];
+                API.sendChat("@" + data.from + " " + LoveMsg[Math.floor(Math.random() * LoveMsg.length)]);
+                    swagbot.misc.ready = false;
+                    setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                }
+        }
+        if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+            if(msg.indexOf("fuck you bot") !== -1 || msg.indexOf("I hate you bot") !== -1 || msg.indexOf("stupid bot") !== -1 || msg.indexOf("bot fuck you") !== -1 || msg.indexOf("f u bot") !== -1 || msg.indexOf("bot f u") !== -1 || msg.indexOf("fuhk yuh bot") !== -1 || msg.indexOf("bot fuhk you") !== -1){
+                var FuckMsg = ["Sonny Boi watch what you are saying to me...","Did you're mom teach you to swear like that?","< Test f*** >.. Sorry 0% effs were given by me."];
+                API.sendChat("@" + data.from + " " + FuckMsg[Math.floor(Math.random() * FuckMsg.length)]);
+                    swagbot.misc.ready = false;
+                    setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                }
+        }        
+        if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+            if(msg.indexOf("son of a bitch bot") !== -1 || msg.indexOf("bot son of a bitch") !== -1 || msg.indexOf("soab bot") !== -1 || msg.indexOf("bot soab") !== -1 || msg.indexOf("son of a biatch bot") !== -1 || msg.indexOf("bot son of a biatch") !== -1){
+                var FuckMsg = ["Nah.. Actually im the son of Bender.","What you just said you no-good, rat-bastard human, die in a fire. :)","< Test f*** >.. Sorry 0% f*** were given by me.","http://stream1.gifsoup.com/webroot/animatedgifs/980837_o.gif"];
+                API.sendChat("@" + data.from + " " + FuckMsg[Math.floor(Math.random() * FuckMsg.length)]);
+                    swagbot.misc.ready = false;
+                    setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                }
+        }
+        
+    });
