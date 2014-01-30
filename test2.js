@@ -28,7 +28,7 @@ BOT.addCommand('lastmsg', cmdLastMsg, API.ROLE.BOUNCER);
 BOT.setPluginStatus('Basic Commands', true);
 
 function cmdLastMsg(args, user)
-if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){ {
+(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){ {
     if(args.length == 0) return false;
     var u = BOT.getUserByName(args[0]);
     var time = BOT.INTERNAL.lastMessageTime[u['id']]; var current = new Date().getTime();
