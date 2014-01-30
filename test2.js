@@ -362,7 +362,7 @@ if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
     var d = (current - time) / 1000; var t = 'seconds';
     if(d > 60) {d = d / 60; t = 'minutes'; if(d > 60) {d = d / 60; t = 'hours';} }
     if(d == 1) {t = t.substring(0, -1);}
-    BOT.sendMessage('Last message from '+u['username']+' was ' + d + ' ' + t + ' ago', user);
+    BOT.sendchat('Last message from '+u['username']+' was ' + d + ' ' + t + ' ago', user);
 }
 
 
