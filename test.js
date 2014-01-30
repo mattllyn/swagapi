@@ -253,7 +253,7 @@ function listener(data)
         if (title.indexOf(blockedSongs[i]) != -1 || author.indexOf(blockedArtists[i]) != -1)
         {
             API.moderateForceSkip();
-            chatMe("I Skipped: \"" + title + "\" because it is blocked.");
+            API.sendChat("I Skipped: \"" + title + "\" because it is blocked.");
             return;
         }
     }
@@ -1475,7 +1475,7 @@ case "votes":
             }
         }
     });
-
+dd
     API.on(API.CHAT, function(data){
         msg = data.message.toLowerCase(), chatID = data.chatID;
 
