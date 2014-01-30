@@ -1586,9 +1586,9 @@ case "votes":
         
     });
 	
-API.on(API.DJ_ADVANCE, DJ_ADVANCE);
+    API.on(API.DJ_ADVANCE, DJ_ADVANCE);
     function DJ_ADVANCE(data){
-        if(swagbot.settings.ruleSkip && typeof ruleSkip[data.media.id] != "undefined"){
+        if(killerBot.settings.ruleSkip && typeof ruleSkip[data.media.id] != "undefined"){
             switch(ruleSkip[data.media.id].rule){
                 case '1':
                     API.sendChat('@'+data.dj.username+' Dont play troll songs.');
