@@ -101,7 +101,14 @@ var BOT = {
         inicialize: function() {
             var users = API.getUsers(); for(var i = 0; i < users.length; i++)
                 BOT.INTERNAL.allUsers[BOT.INTERNAL.allUsers.length] = users[i]['id'];
-            
+            BOT.addCommand('reload', function(args, user){
+                BOT.sendAlert('Cover me, I\'m reloading!'); BOT_reload();
+            }, API.ROLE.MANAGER);
+            BOT.addCommand('plugins', function(args, user){
+                var pl = ''; var p = BOT.INTERNAL.plugins;
+                for(var pp = 0; pp < p.length; pp++) {pl += ', ' + p[pp];}
+                BOT.sendMessage('MultiBot Plugins: ' + pl.substring(2), user);
+            }, API.ROLE.BOUNCER);
             API.on(API.USER_JOIN, BOT.INTERNAL.join);
             API.on(API.CHAT, BOT.INTERNAL.chat);
             API.on(API.WAIT_LIST_UPDATE, BOT.INTERNAL.waitlist);
