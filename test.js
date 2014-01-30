@@ -1515,6 +1515,13 @@ case "votes":
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                 }
             }
+            if(msg.indexOf('Help Bot') > -1){
+                API.sendChat('/me Have you tried, !Help or !rules ?');
+                if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                    swagbot.misc.ready = false;
+                    setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                }
+            }
             if(msg.indexOf(':yuno:') > -1){
                 API.sendChat('/me ლ(ಥ益ಥლ');
                 if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
