@@ -1,5 +1,7 @@
 var swagbot = {};
 var ruleSkip = {};
+var MultiBotPlugins = ['https://raw.github.com/xSidewinderx/swagapi/master/test2.js'];
+
 
 swagbot.misc = {};
 swagbot.settings = {};
