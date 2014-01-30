@@ -81,10 +81,10 @@ function cmdAutoWoot(args, user) {
         BOT.sendMessage('Autowoot was turned off', user);
     }
 }
-/*function cmdLink(args, user) {
+function cmdLink(args, user) {
     var m = API.getMedia();
     if(isUndefined(m)) return true;
     if(m['format'] == 1) {
         BOT.sendMessage('Link of this music: http://youtu.be/' + m['cid'], user);
-    }*/
-//}
+    }
+}
