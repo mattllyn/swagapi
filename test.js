@@ -514,8 +514,6 @@ API.moderateDeleteChat(data.chatID);
 
 
 
-
-
 /*
                     case "theme":
                         if(typeof command[1] == "undefined"){
@@ -862,6 +860,7 @@ case "votes":
                      if(API.getUser(data.fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
                      API.moderateLockWaitList(true);
                      API.moderateForceSkip();
+            BOT.relistUser(user, 1);
             setTimeout(function(){
               API.moderateLockWaitList(false);
             }, 650);
