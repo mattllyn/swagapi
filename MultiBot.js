@@ -152,7 +152,7 @@ var BOT = {
             BOT.sendAlert("Booting up!"); BOT.INTERNAL.setMode(true);
         },
         close: function(e) {
-            BOT.sendAlert("Reloading!");
+            BOT.sendAlert("Shutting down!");
             console.log('Removing TempBans');
             var users = BOT.INTERNAL.allUsers;
             var bans = BOT.INTERNAL.tempBans;
