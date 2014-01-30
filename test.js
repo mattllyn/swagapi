@@ -1586,35 +1586,35 @@ case "votes":
         
     });
 	
-    API.on(API.DJ_ADVANCE, DJ_ADVANCE);
+API.on(API.DJ_ADVANCE, DJ_ADVANCE);
     function DJ_ADVANCE(data){
-        if(swagbot.settings.ruleSkip && typeof ruleSkip[data.media.id] != "undefined"){
+        if(mubBot.settings.ruleSkip && typeof ruleSkip[data.media.id] != "undefined"){
             switch(ruleSkip[data.media.id].rule){
                 case '1':
-                    API.sendChat('@'+data.dj.username+'Welcome to the swag-craft radio!');
+                    API.sendChat('@'+data.dj.username+' Dont play troll songs.');
                     botMethods.skip();
                     break;
                 case '2':
-                    API.sendChat('@'+data.dj.username+' No full or repetitive partial nudity, racism, derogatory or defamatory images or statements.');
+                    API.sendChat('@'+data.dj.username+' No songs that are longer than 5 mins without permission.');
                     botMethods.skip();
                     break;
                 case '3':
-                    API.sendChat('@'+data.dj.username+' No overly excessive/repetitive swearing in music/videos.');
+                    API.sendChat('@'+data.dj.username+' Song was not in English.');
                     botMethods.skip();
                     break;
-                case '13':
-                    API.sendChat('@'+data.dj.username+' No compilation videos. Mashups/remixes are allowed.');
+                case '4':
+                    API.sendChat('@'+data.dj.username+' No R34/clop/porn/gore. This includes links, songs, and chat.');
                     botMethods.skip();
                     break;
-                case '14':
-                    API.sendChat('@'+data.dj.username+' No tracks longer than 5 minutes maximum (this is subject to change during busy times, at the discretion of the staff).');
+                case '5':
+                    API.sendChat('@'+data.dj.username+' Don\'t Play songs that are in history!');
                     botMethods.skip();
                     break;
-				case '35':
-                    API.sendChat('@'+data.dj.username+' Please do not play recently played tracks (check the history button before reaching the DJ booth). Any tracks that have been played within the last history will be skipped.');
+                case '6':
+                    API.sendChat('@'+data.dj.username+' Playing Videos/season video/Movies, that has no effort are subject to being skipped');
                     botMethods.skip();
                     break;
-                case '99':
+                case '7':
                     API.sendChat('@'+data.dj.username+' Just no..');
                     botMethods.skip();
                     break;
@@ -1626,7 +1626,7 @@ case "votes":
         }
         $.getJSON('http://gdata.youtube.com/feeds/api/videos/'+data.media.cid+'?v=2&alt=jsonc&callback=?', function(json){response = json.data});
         setTimeout(function(){
-            if(typeof response === 'undefined' && data.media.format != 2 && swagbot.settings.removedFilter){
+            if(typeof response === 'undefined' && data.media.format != 2 && mubBot.settings.removedFilter){
                 API.sendChat('/me This video may be unavailable!!');
                 //botMethods.skip();
             }
@@ -1637,10 +1637,10 @@ case "votes":
 
 
     botMethods.loadStorage();
-    console.log("Running SwagBot User Shell version " + swagbot.misc.version);
+    console.log("Running Swagbot Script version " + mubBot.misc.version);
 
     setTimeout(function(){
-        $.getScript('http://connect.soundcloud.com/sdk.js');
+        $.getScript('');
     }, 1000);
 
     setTimeout(function(){
