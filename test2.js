@@ -47,7 +47,7 @@ function cmdBan(args, user) {
 function cmdLockskip(args, user) {
     API.moderateForceSkip();
     BOT.sendMessage('Skipped the DJ, but the DJ will be relisted to position 3', user);
-    BOT.relistUser(user, 3);
+    BOT.relistUser(user, 1);
 }
 function cmdPing(args, user) {
     BOT.sendMessage('PONG!', user);
@@ -85,6 +85,6 @@ function cmdLink(args, user) {
     var m = API.getMedia();
     if(isUndefined(m)) return true;
     if(m['format'] == 1) {
-        BOT.sendMessage('Link of this music: http://youtu.be/' + m['cid'], user);
+        BOT.sendMessage('Link to this song: http://youtu.be/' + m['cid'], user);
     }
 }
