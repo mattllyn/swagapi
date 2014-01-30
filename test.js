@@ -1475,7 +1475,7 @@ case "votes":
             }
         }
     });
-dd
+
     API.on(API.CHAT, function(data){
         msg = data.message.toLowerCase(), chatID = data.chatID;
 
