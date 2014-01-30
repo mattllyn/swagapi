@@ -132,7 +132,7 @@ var BOT = {
             $('body').append('<style class="botelement">' + css + '</style>');
             
            BOT.addCommand('reloadmesidewinder', function(args, user){
-            //  BOT.sendAlert('I\'m reloading!'); BOT_reload();
+            BOT.sendAlert('I\'m reloading!'); BOT_reload();
            }, API.ROLE.MANAGER);
            //BOT.addCommand('plugins', function(args, user){
             //    var pl = ''; var p = BOT.INTERNAL.plugins;
