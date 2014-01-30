@@ -1637,7 +1637,7 @@ API.on(API.DJ_ADVANCE, DJ_ADVANCE);
 
 
     botMethods.loadStorage();
-    console.log("Running Swagbot Script version " + swagbot.jsmisc.version);
+    console.log("Running Swagbot Script version " + swagbot.misc.version);
 
     setTimeout(function(){
         $.getScript('');
