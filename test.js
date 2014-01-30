@@ -299,7 +299,7 @@ botMethods.djAdvanceEvent = function(data){
         }else if(API.getUser().permission > 1){
             API.sendChat("@" + API.getDJ().username + ", playing songs that are in the history isn't allowed, please check next time! Skipping..");
            API.moderateForceSkip();
-        }else if(song.duration > swagbot.settings.maxLength * 60){
+        }else if(getMedia.duration > swagbot.settings.maxLength * 60){
             swagbot.pubVars.skipOnExceed = setTimeout( function(){
                API.sendChat("@"+ API.getDJ().username +" You have now played for as long as this room allows, time to let someone else have the booth!");
              API.moderateForceSkip();
