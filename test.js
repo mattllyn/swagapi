@@ -1588,7 +1588,7 @@ case "votes":
 	
 API.on(API.DJ_ADVANCE, DJ_ADVANCE);
     function DJ_ADVANCE(data){
-        if(mubBot.settings.ruleSkip && typeof ruleSkip[data.media.id] != "undefined"){
+        if(swagbot.jssettings.ruleSkip && typeof ruleSkip[data.media.id] != "undefined"){
             switch(ruleSkip[data.media.id].rule){
                 case '1':
                     API.sendChat('@'+data.dj.username+' Dont play troll songs.');
@@ -1626,7 +1626,7 @@ API.on(API.DJ_ADVANCE, DJ_ADVANCE);
         }
         $.getJSON('http://gdata.youtube.com/feeds/api/videos/'+data.media.cid+'?v=2&alt=jsonc&callback=?', function(json){response = json.data});
         setTimeout(function(){
-            if(typeof response === 'undefined' && data.media.format != 2 && mubBot.settings.removedFilter){
+            if(typeof response === 'undefined' && data.media.format != 2 && swagbot.jssettings.removedFilter){
                 API.sendChat('/me This video may be unavailable!!');
                 //botMethods.skip();
             }
@@ -1637,7 +1637,7 @@ API.on(API.DJ_ADVANCE, DJ_ADVANCE);
 
 
     botMethods.loadStorage();
-    console.log("Running Swagbot Script version " + mubBot.misc.version);
+    console.log("Running Swagbot Script version " + swagbot.jsmisc.version);
 
     setTimeout(function(){
         $.getScript('');
