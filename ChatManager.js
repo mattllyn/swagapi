@@ -38,7 +38,7 @@ function syncAfk() {
            // BOT.kick(u, API.getUser());
         } else if(l + afkMS < now) {
             if(afkAnounce[u['id']] == false) {
-                API.sendChat('@'+u['username']+' you are afk. Chat in '+afkCountdown+' minutes or I\'ll kick you');
+              //  API.sendChat('@'+u['username']+' you are afk. Chat in '+afkCountdown+' minutes or I\'ll kick you');
                 afkAnounce[u['id']] = true;
             }
         } else {
