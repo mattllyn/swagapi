@@ -87,4 +87,4 @@ function cmdAutoWoot(args, user) {
     if(m['format'] == 1) {
         BOT.sendMessage('Link of this music: http://youtu.be/' + m['cid'], user);
     }*/
-}
+//}
