@@ -41,8 +41,8 @@ swagbot.settings.ruleSkip = true;
 swagbot.settings.removedFilter = true;
 
 
-//                          Side                 Side                       
-swagbot.admins = ["52d363bdc3b97a416d5c837f", "52d363bdc3b97a416d5c837f"];
+//                          Side                               
+swagbot.admins = ["52d363bdc3b97a416d5c837f"];
 
 swagbot.filters.swearWords = ["slut","mofo","penis","penus",":b:itch","fuck","shit","bitch","cunt","twat","faggot","queer","dumb ass","pussy","dick","cocksucker","asshole","vagina","tit","mangina","tits","cock","jerk","puta","puto","cum","sperm","ass-hat","ass-jabber","assbanger","assfuck","assfucker","assnigger","butt plug","bollox","blowJob","Blow job","bampot","cameltoe","chode","clitfuck","cunt","dildo","douche","doochbag","dike","dyke","fatass","fat ass","fuckass","fuckbag","fuckboy","fuckbrain","gay","gaylord","handjob","hoe","Jizz","jerk off","kunt","lesbian","lesbo","lezzie","minge","munging","nut sack","nutsack","queer","queef","rimjob","scrote","schlong","titfuck","twat","unclefucker","va-j-j","vajayjay","vjayjay","wankjob","whore"];
 
