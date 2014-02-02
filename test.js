@@ -356,7 +356,7 @@ API.moderateDeleteChat(data.chatID);
         case "facebook":
         case "fb":
           if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
-            API.sendChat('@'data.from +"Please join our facebook group here: www.facebook.com/swagcraftmc");
+            API.sendChat(data.from +"Please join our facebook group here: www.facebook.com/swagcraftmc");
             swagbot.misc.ready = false;
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
@@ -797,7 +797,7 @@ case "votes":
                         }else if(command[1].indexOf("@") > -1){
                             API.sendChat(command[1]+ "Create a playlist and populate it with songs from either YouTube or Soundcloud. Click the 'Join Waitlist' button and wait your turn to play music.");
                                 setTimeout(function(){
-                            API.sendChat("Ask a ResidentDJ if you're unsure about your song choice.");
+                            API.sendChat("Ask a mod if you're unsure about your song choice.");
                          }, 650);
                         }
                         if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
