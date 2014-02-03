@@ -1569,7 +1569,7 @@ case "votes":
         }
         if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
             if(msg.indexOf("fuck you bot") !== -1 || msg.indexOf("I hate you bot") !== -1 || msg.indexOf("stupid bot") !== -1 || msg.indexOf("bot fuck you") !== -1 || msg.indexOf("f u bot") !== -1 || msg.indexOf("bot f u") !== -1 || msg.indexOf("fuhk yuh bot") !== -1 || msg.indexOf("bot fuhk you") !== -1){
-                var FuckMsg = ["Sonny Boi watch what you are saying to me...","Did you're mom teach you to swear like that?","< Test f*** >.. Sorry 0% effs were given by me."];
+                var FuckMsg = ["watch what you are saying to me...","Did you're mom teach you to swear like that?","< Test f*** >.. Sorry 0% effs were given by me."];
                 API.sendChat("@" + data.from + " " + FuckMsg[Math.floor(Math.random() * FuckMsg.length)]);
                     swagbot.misc.ready = false;
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
@@ -1627,7 +1627,7 @@ case "votes":
         $.getJSON('http://gdata.youtube.com/feeds/api/videos/'+data.media.cid+'?v=2&alt=jsonc&callback=?', function(json){response = json.data});
         setTimeout(function(){
             if(typeof response === 'undefined' && data.media.format != 2 && swagbot.settings.removedFilter){
-                API.sendChat('/me This video may be unavailable!!Skipping soon!');
+                API.sendChat('/me This video may be unavailable!!');
                 botMethods.skip();
             }
         }, 1500);
@@ -1645,6 +1645,6 @@ case "votes":
 
     setTimeout(function(){
         SC.initialize({
-            client_id: 'eae62c8e7a30564e9831b9e43f1d484a'
+            client_id: '52d363bdc3b97a416d5c837f'
         });
     }, 3000);
