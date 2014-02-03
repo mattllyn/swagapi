@@ -1569,7 +1569,7 @@ case "votes":
         }
         if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
             if(msg.indexOf("fuck you bot") !== -1 || msg.indexOf("I hate you bot") !== -1 || msg.indexOf("stupid bot") !== -1 || msg.indexOf("bot fuck you") !== -1 || msg.indexOf("f u bot") !== -1 || msg.indexOf("bot f u") !== -1 || msg.indexOf("fuhk yuh bot") !== -1 || msg.indexOf("bot fuhk you") !== -1){
-                var FuckMsg = ["watch what you are saying to me...","Did you're mom teach you to swear like that?","< Test f*** >.. Sorry 0% effs were given by me."];
+                var FuckMsg = ["watch what you are saying to me...","Did you're mom teach you to swear like that?"];
                 API.sendChat("@" + data.from + " " + FuckMsg[Math.floor(Math.random() * FuckMsg.length)]);
                     swagbot.misc.ready = false;
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
@@ -1577,7 +1577,7 @@ case "votes":
         }        
         if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
             if(msg.indexOf("son of a bitch bot") !== -1 || msg.indexOf("bot son of a bitch") !== -1 || msg.indexOf("soab bot") !== -1 || msg.indexOf("bot soab") !== -1 || msg.indexOf("son of a biatch bot") !== -1 || msg.indexOf("bot son of a biatch") !== -1){
-                var FuckMsg = ["Nah.. Actually im the son of Bender.","What you just said you no-good, rat-bastard human, die in a fire. :)","< Test f*** >.. Sorry 0% f*** were given by me.","http://stream1.gifsoup.com/webroot/animatedgifs/980837_o.gif"];
+                var FuckMsg = ["Nah.. Actually im the son of Bender.","What did you just say!","http://stream1.gifsoup.com/webroot/animatedgifs/980837_o.gif"];
                 API.sendChat("@" + data.from + " " + FuckMsg[Math.floor(Math.random() * FuckMsg.length)]);
                     swagbot.misc.ready = false;
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
