@@ -44,7 +44,7 @@ swagbot.settings.removedFilter = true;
 //                          Side                               
 swagbot.admins = ["52d363bdc3b97a416d5c837f"];
 
-swagbot.filters.swearWords = ["slut","yuk-i","yu","mofo","penis","penus",":b:itch","fuck","shit","bitch","cunt","twat","faggot","queer","dumb ass","pussy","dick","cocksucker","🙊","yuki","asshole","vagina","tit","mangina","tits","cock","jerk","puta","puto","cum","sperm","ass-hat","ass-jabber","assbanger","assfuck","assfucker","assnigger","butt plug","bollox","blowJob","Blow job","bampot","cameltoe","chode","clitfuck","cunt","dildo","douche","doochbag","dike","dyke","fatass","fat ass","fuckass","fuckbag","fuckboy","fuckbrain","gay","gaylord","handjob","hoe","Jizz","jerk off","kunt","lesbian","lesbo","lezzie","minge","munging","nut sack","nutsack","queer","queef","rimjob","scrote","schlong","titfuck","twat","unclefucker","va-j-j","vajayjay","vjayjay","wankjob","whore"];
+swagbot.filters.swearWords = ["slut","yuki-ki","mofo","penis","penus",":b:itch","fuck","shit","bitch","cunt","twat","faggot","queer","dumb ass","pussy","dick","cocksucker","🙊","yuki","asshole","vagina","tit","mangina","tits","cock","jerk","puta","puto","cum","sperm","ass-hat","ass-jabber","assbanger","assfuck","assfucker","assnigger","butt plug","bollox","blowJob","Blow job","bampot","cameltoe","chode","clitfuck","cunt","dildo","douche","doochbag","dike","dyke","fatass","fat ass","fuckass","fuckbag","fuckboy","fuckbrain","gay","gaylord","handjob","hoe","Jizz","jerk off","kunt","lesbian","lesbo","lezzie","minge","munging","nut sack","nutsack","queer","queef","rimjob","scrote","schlong","titfuck","twat","unclefucker","va-j-j","vajayjay","vjayjay","wankjob","whore"];
 
 swagbot.filters.racistWords = ["nigger","kike","spick","porchmonkey","camel jockey","towelhead","towel head","chink","gook","porch monkey","Coolie","nigga","nigguh","black shit","black monkey","you ape","you monkey","you gorilla","black ass","assnigger","honkey","White bread","white ass","jungle bunny","niglet","nigaboo","paki","ruski","sand nigger","sandnigger","wetback","wet back"];
 
@@ -183,6 +183,7 @@ var JoinMsg = ["@user has joined!","welcome @user!","Hey there @user!","Glad you
 r = Math.floor(Math.random() * JoinMsg.length);
 API.sendChat(JoinMsg[r].replace("user", user.username));
 }
+
  
 
 function djAdvanceEvent(data){
@@ -364,7 +365,7 @@ API.moderateDeleteChat(data.chatID);
 
                     case "rules":
                         if(typeof command[1] == "undefined"){
-                            API.sendChat("Room Rules - 1.Do not play troll songs 2.Do not ask for ranks 3.Don\'t spam 4.No Advertising rooms, websites, etc.. 5.No songs over 5 minutes unless aproved by a mod 6.Dont spam dislike peoples videos, or you will be banned.");
+                            API.sendChat("@" + data.from + " " + "Room Rules - 1.Do not play troll songs 2.Do not ask for ranks 3.Don\'t spam 4.No Advertising rooms, websites, etc.. 5.No songs over 5 minutes unless aproved by a mod 6.Dont spam dislike peoples videos, or you will be banned.");
                         }else if(command[1].indexOf("@") > -1){
                             API.sendChat(command[1]+"Room Rules - 1.Do not play troll songs 2.Do not ask for ranks 3.Don\'t spam 4.No Advertising rooms, websites, etc.. 5.No songs over 5 minutes unless aproved by a mod 6.Dont spam dislike peoples videos, or you will be banned.");
                         }else{
