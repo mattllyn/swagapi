@@ -176,13 +176,13 @@ Array.prototype.remove=function(){var c,f=arguments,d=f.length,e;while(d&&this.l
  
 API.on(API.DJ_ADVANCE, djAdvanceEvent);
  
-API.on(API.USER_JOIN, UserJoin);
-function UserJoin(user)
-{
-var JoinMsg = ["@user has joined!","welcome @user!","Hey there @user!","Glad you came by @user"];
-r = Math.floor(Math.random() * JoinMsg.length);
-API.sendChat(JoinMsg[r].replace("user", user.username));
-}
+//API.on(API.USER_JOIN, UserJoin);
+//function UserJoin(user)
+//{
+//var JoinMsg = ["@user has joined!","welcome @user!","Hey there @user!","Glad you came by @user"];
+//r = Math.floor(Math.random() * JoinMsg.length);
+//API.sendChat(JoinMsg[r].replace("user", user.username));
+//}
 
  
 
@@ -1501,20 +1501,6 @@ case "votes":
     API.on(API.CHAT, function(data){
         msg = data.message.toLowerCase(), chatID = data.chatID, fromID = data.fromID;
         if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 ||API.getUser(fromID).permission > 1){
-            if(msg.indexOf(':eyeroll:') > -1){
-                API.sendChat('/me ¬_¬');
-                if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                    swagbot.misc.ready = false;
-                    setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
-                }
-            }
-            if(msg.indexOf(':notamused:') > -1){
-                API.sendChat('/me ಠ_ಠ');
-                if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                    swagbot.misc.ready = false;
-                    setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
-                }
-            }
             if(msg.indexOf('help bot') > -1){
                 API.sendChat('/me Have you tried, !Help or !rules ?');
                 if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
