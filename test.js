@@ -450,7 +450,7 @@ API.moderateDeleteChat(data.chatID);
                             var randomSentence = Math.floor(Math.random() * 1);
                             switch(randomSentence){
                                 case 0:
-                                    API.sendChat("@" + data.from + ","+ swagbot.misc.fortune[randomFortune]);
+                                    API.sendChat("@" + data.from + " ,"+ swagbot.misc.fortune[randomFortune]);
                                     break;
                                 case 1:
                                     API.sendChat("@" + data.from + ","+ swagbot.misc.fortune[randomFortune]);
