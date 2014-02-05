@@ -1,6 +1,6 @@
 var swagbot = {};
 var ruleSkip = {};
-
+var songBoundary = 60 * 7;
 swagbot.misc = {};
 swagbot.settings = {};
 swagbot.moderators = {};
@@ -239,7 +239,7 @@ botMethods.checkHistory = function(){
     caught--;
     return caught;
 };
- 
+ API.on(API.DJ_ADVANCE, listener);
 function listener(data)
 {
     if (data == null)
@@ -267,7 +267,11 @@ function listener(data)
         window.setTimeout(skipLongSong, 1000 * songBoundary);
     }
 }
- 
+ function skipLongSong()
+{
+    API.moderateForceSkip();
+    chatMe("Skipping song because it has exceeded the song limit (" + (songBoundary / 60) + " minutes.)");
+}
 botMethods.getID = function(username){
     var users = API.getUsers();
     var result = "";
