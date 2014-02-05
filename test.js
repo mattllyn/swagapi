@@ -343,6 +343,13 @@ botMethods.djAdvanceEvent = function(data){
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
                         break;
+                    case "test":
+                        if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
+                        API.sendChat("Should require ResidentDJ");
+                        swagbot.misc.ready = false;
+                            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                        }
+                        break;
     case "say":
                     if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
                         if(typeof command[1] === "undefined"){
@@ -351,14 +358,7 @@ botMethods.djAdvanceEvent = function(data){
                         }
                     }
                         break; 
-                       case "test":
-                    if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
-                        if(typeof command[1] === "undefined"){
-                            }else{
-                            API.sendChat("Should require ResidentDJ");
-                        }
-                    }
-                        break;
+                       
 
                     case "djinfo":
                         if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
