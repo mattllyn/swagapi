@@ -326,12 +326,19 @@ botMethods.djAdvanceEvent = function(data){
                     command[1] = command[1] + ' ' + command[i];
                 }
             }
-API.moderateDeleteChat(data.chatID);
+                   API.moderateDeleteChat(data.chatID);
             if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(data.fromID).permission > 1){
                 switch(command[0].toLowerCase()){
                     case "marco":
                         API.sendChat("Polo");
                         if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            swagbot.misc.ready = false;
+                            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                        }
+                        break;
+                    case "ping":
+                        API.sendChat("Pong");
+                        if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission > 2){
                             swagbot.misc.ready = false;
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
@@ -381,13 +388,29 @@ API.moderateDeleteChat(data.chatID);
           }
           break;
 
+        case "adblock":
+          if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
+            API.sendChat(data.from +"Get AdBlock here: http://getadblock.com");
+            swagbot.misc.ready = false;
+            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+          }
+          break;
+
+        case "emoji":
+          if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
+            API.sendChat(data.from + "Emoji list: http://www.emoji-cheat-sheet.com/");
+            swagbot.misc.ready = false;
+            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+          }
+          break;
+
                     case "rules":
                         if(typeof command[1] == "undefined"){
-                            API.sendChat("@" + data.from + " " + "Room Rules - 1.Do not play troll songs 2.Do not ask for ranks 3.Don\'t spam 4.No Advertising rooms, websites, etc.. 5.No songs over 5 minutes unless aproved by a mod 6.Dont spam dislike peoples videos, or you will be banned.");
+                            API.sendChat("@" + data.from + " " + "Room Rules - 1.Do not play troll songs 2.Do not ask for ranks 3.Don\'t spam 4.No Advertising rooms, websites, etc.. 5.No songs over 5 minutes unless approved by a mod 6.Dont spam dislike peoples videos, or you will be banned.");
                         }else if(command[1].indexOf("@") > -1){
-                            API.sendChat(command[1]+"Room Rules - 1.Do not play troll songs 2.Do not ask for ranks 3.Don\'t spam 4.No Advertising rooms, websites, etc.. 5.No songs over 5 minutes unless aproved by a mod 6.Dont spam dislike peoples videos, or you will be banned.");
+                            API.sendChat(command[1]+"Room Rules - 1.Do not play troll songs 2.Do not ask for ranks 3.Don\'t spam 4.No Advertising rooms, websites, etc.. 5.No songs over 5 minutes unless approved by a mod 6.Dont spam dislike peoples videos, or you will be banned.");
                         }else{
-                            API.sendChat("Room Rules - 1.Do not play troll songs 2.Do not ask for ranks 3.Don\'t spam 4.No Advertising rooms, websites, etc.. 5.No songs over 5 minutes unless aproved by a mod 6.Dont spam dislike peoples videos, or you will be banned.");
+                            API.sendChat("Room Rules - 1.Do not play troll songs 2.Do not ask for ranks 3.Don\'t spam 4.No Advertising rooms, websites, etc.. 5.No songs over 5 minutes unless approved by a mod 6.Dont spam dislike peoples videos, or you will be banned.");
                         }
                         if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
                             swagbot.misc.ready = false;
@@ -532,7 +555,7 @@ API.moderateDeleteChat(data.chatID);
                         break;
                       case "commands":
                         if(typeof command[1] == "undefined"){
-              API.sendChat("User Commands -| Rules | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
+              API.sendChat("User Commands -| Rules | Adblock | emoji | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }else if(command[1].indexOf("@") > -1){
                          ("User Commands -| Rules | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }else{
@@ -564,6 +587,19 @@ case "votes":
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
                         break;
+                case "define":
+          if(typeof command[1] == "undefined"){
+            API.sendChat("@" + data.from + " Define what?!");
+          }else if(command[1].toLowerCase().indexOf("xxx") === -1 && command[1].toLowerCase().indexOf("porn") === -1 && command[1].toLowerCase().indexOf("sex") === -1){
+            API.sendChat("@"+ data.from +" http://www.urbandictionary.com/define.php?term="+command[1]);
+          }else{
+            API.sendChat("@"+ data.from +" What are you an idiot?");
+          }
+          if(Countrybot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+            Countrybot.misc.ready = false;
+            setTimeout(function(){ Countrybot.misc.ready = true; }, Countrybot.settings.cooldown * 1000);
+          }
+          break;
 			case "songlink":
                         if(API.getMedia().format == 1){
                             API.sendChat("@" + data.from + " " + "Songlink @ http://youtu.be/" + API.getMedia().cid);
@@ -805,7 +841,6 @@ case "votes":
 						}, 950);
                         }
                         break;
-
 
 
 
