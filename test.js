@@ -60,6 +60,8 @@ var blockedSongs = [
     "The Fox [Official music video HD]",
     "vine",
     "parody",
+    "Yuno Gasai",
+    "Yuki",
     "10 hour",
     "10 hours"];
  
@@ -67,7 +69,6 @@ var blockedArtists = [
     "Rick Astley",
     "Miley Cyrus",
     "Justin bieber",
-    "Yuno Gasai",
     "Rebbeca black",
     "2pac",
     "Drake",
@@ -253,7 +254,7 @@ function listener(data)
     }
  
     var title = API.getMedia().title;
-    var author = data.media.author;
+    var author = API.getMedia().author;
     for (var i = 0; i < blockedSongs.length; i++)
     {
         if (title.indexOf(blockedSongs[i]) != -1 || author.indexOf(blockedArtists[i]) != -1)
