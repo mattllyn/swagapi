@@ -1051,6 +1051,21 @@ case "votes":
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
                         break;
+case "uptime":
+                        if(swagbot.admins.indexOf(fromID) > -1){
+                            var response = "";
+                            var currentTime = new Date().getTime();
+                            var minutes = Math.floor((currentTime - joined) / 60000);
+                            var hours = 0;
+                            while(minutes > 60){
+                                minutes = minutes - 60;
+                                hours++;
+                            }
+                            hours == 0 ? response = "Running for " + minutes + "m " : response = "Running for " + hours + "h " + minutes + "m";+ swagbot.settings.removedFilter;
+                          
+                        break;  API.sendChat(response);
+                        }
+                          
 
                      case "status":
                         if(swagbot.admins.indexOf(fromID) > -1){
@@ -1070,9 +1085,9 @@ case "votes":
                             response = response + " | MaxLength: " + swagbot.settings.maxLength + "m";
                             response = response + " | Cooldown: " + swagbot.settings.cooldown + "s";
                             response = response + " | Removed Video Filter: "+ swagbot.settings.removedFilter;
-                            API.sendChat(response);
+                          
+                        break;  API.sendChat(response);
                         }
-                        break;
  
 
                     case "cooldown":
