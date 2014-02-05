@@ -222,6 +222,10 @@ function sendAnnouncement()
         }
     chatMe(announcements[lastAnnouncement]);
 }
+function chatMe(msg)
+{
+        API.sendChat(msg);
+};
 API.on(API.CURATE_UPDATE, callback);
 function callback(obj)
 {
