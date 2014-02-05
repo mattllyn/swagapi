@@ -60,8 +60,6 @@ var blockedSongs = [
     "The Fox [Official music video HD]",
     "vine",
     "parody",
-    "Yuno Gasai",
-    "Yuki",
     "10 hour",
     "10 hours"];
  
@@ -69,6 +67,7 @@ var blockedArtists = [
     "Rick Astley",
     "Miley Cyrus",
     "Justin bieber",
+    "Yuno Gasai",
     "Rebbeca black",
     "2pac",
     "Drake",
