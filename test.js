@@ -599,7 +599,8 @@ case "votes":
             swagbot.misc.ready = false;
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
-          break;case "wiki":
+          break;
+        case "wiki":
           if(typeof command[1] == "undefined"){
             API.sendChat("@"+data.from+" https://en.wikipedia.org/wiki/Special:Random");
           }else{
@@ -618,6 +619,11 @@ case "votes":
                 }
                 );
           }
+          if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+            swagbot.misc.ready = false;
+            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+          }
+          break;
 			case "songlink":
                         if(API.getMedia().format == 1){
                             API.sendChat("@" + data.from + " " + "Songlink @ http://youtu.be/" + API.getMedia().cid);
