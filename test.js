@@ -214,6 +214,14 @@ function grab() {
   }
     });
 }
+function sendAnnouncement()
+{
+        if (lastAnnouncement++ >= announcements.length - 1)
+        {
+                lastAnnouncement = 0;
+        }
+    chatMe(announcements[lastAnnouncement]);
+}
 API.on(API.CURATE_UPDATE, callback);
 function callback(obj)
 {
