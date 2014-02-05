@@ -1390,7 +1390,7 @@ case "votes":
         }
         if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
             if(msg.indexOf("ily bot") !== -1 || msg.indexOf("bot ily") !== -1 || msg.indexOf("i love you bot") !== -1 || msg.indexOf("bot i love you") !== -1 || msg.indexOf("i luv you bot") !== -1 || msg.indexOf("bot i luv you") !== -1 || msg.indexOf("i luv u bot") !== -1 || msg.indexOf("bot i luv u") !== -1 || msg.indexOf("i luv you bot") !== -1 || msg.indexOf("i love you more bot") !== -1){
-                var LoveMsg = [" I love you too baby!","I love you too ;)","I love you too o.0","Sweet.. Love you to ;)"];
+                var LoveMsg = [" I love you too baby <3","I love you too <3","I love you too o.0","Sweet.. Love you to <3"];
                 API.sendChat("@" + data.from + " " + LoveMsg[Math.floor(Math.random() * LoveMsg.length)]);
                     swagbot.misc.ready = false;
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
@@ -1406,7 +1406,7 @@ case "votes":
         }        
         if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
             if(msg.indexOf("son of a bitch bot") !== -1 || msg.indexOf("bot son of a bitch") !== -1 || msg.indexOf("soab bot") !== -1 || msg.indexOf("bot soab") !== -1 || msg.indexOf("son of a biatch bot") !== -1 || msg.indexOf("bot son of a biatch") !== -1){
-                var FuckMsg = ["Nah.. Actually im the son of Bender.","What did you just say!","http://stream1.gifsoup.com/webroot/animatedgifs/980837_o.gif"];
+                var FuckMsg = ["Nah.. Actually im the son of Bender.","http://stream1.gifsoup.com/webroot/animatedgifs/980837_o.gif"];
                 API.sendChat("@" + data.from + " " + FuckMsg[Math.floor(Math.random() * FuckMsg.length)]);
                     swagbot.misc.ready = false;
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
