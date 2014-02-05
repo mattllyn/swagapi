@@ -59,7 +59,7 @@ var blockedSongs = [
     "The Fox [Official music video HD]",
     "vine",
     "parody",
-    "10 hour",
+    "10 hours",
 ];
  
 var blockedArtists = [
