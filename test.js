@@ -354,10 +354,28 @@ API.moderateDeleteChat(data.chatID);
                         }
                         break;
 
+        case "op":
+        case "overplayed":
+          if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
+            API.sendChat("@" + data.from + " " + "Oveplayed List http://pastebin.com/Qj8pLGCL");
+            swagbot.misc.ready = false;
+            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+          }
+          break;
+
+        case "bl":
+        case "blacklist":
+          if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
+            API.sendChat("@" + data.from + " " + "Blacklist http://pastebin.com/xf8LMAwt");
+            swagbot.misc.ready = false;
+            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+          }
+          break;
+
         case "facebook":
         case "fb":
           if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
-            API.sendChat(data.from +"Please join our facebook group here: www.facebook.com/swagcraftmc");
+            API.sendChat(data.from +" Please join our facebook group here: www.facebook.com/swagcraftmc");
             swagbot.misc.ready = false;
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
@@ -512,61 +530,13 @@ API.moderateDeleteChat(data.chatID);
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
                         break;
-
-
-
-/*
-                    case "theme":
+                      case "commands":
                         if(typeof command[1] == "undefined"){
-                            API.sendChat("Welcome to the swag-craft radio!");
+              API.sendChat("User Commands -| Rules | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }else if(command[1].indexOf("@") > -1){
-                            API.sendChat(command[1]+"The room is primarily for EDM tracks, however we do allow variations. It's only preferred that you play EDM and you don't always have to play it, you can play whatever you want as long as it doesn't get too many dislikes.");
+                         ("User Commands -| Rules | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }else{
-                            API.sendChat("The room is primarily for EDM tracks, however we do allow variations. It's only preferred that you play EDM and you don't always have to play it, you can play whatever you want as long as it doesn't get too many dislikes.");
-                        }
-                        if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            swagbot.misc.ready = false;
-                            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
-                        }
-                        break;
-					
-					case "whatisemd":
-					case "emd":
-					case "wie":
-                        if(typeof command[1] == "undefined"){
-                            API.sendChat("If you don't know what EDM(electronic dance music) is, Go here: http://goo.gl/Xt3u and a list of edm genres http://goo.gl/mhkV.");
-                        }else if(command[1].indexOf("@") > -1){
-                            API.sendChat(command[1]+"If you don't know what EDM(electronic dance music) is, Go here: http://goo.gl/Xt3u and a list of edm genres http://goo.gl/mhkV.");
-                        }else{
-                            API.sendChat("If you don't know what EDM(electronic dance music) is, Go here: http://goo.gl/Xt3u and a list of edm genres http://goo.gl/mhkV.");
-                        }
-                        if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            swagbot.misc.ready = false;
-                            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
-                        }*/
-                        break;
-					             /*
-					case "whywoot":
-                        if(typeof command[1] == "undefined"){
-                            API.sendChat("Plug gives you 1 point for wooting the current song if you don't like the song i suggest you remain neutral");
-                        }else if(command[1].indexOf("@") > -1){
-                            API.sendChat(command[1]+" Plug gives you 1 point for wooting the current song if you don't like the song i suggest you remain neutral");
-                        }else{
-                            API.sendChat("Plug gives you 1 point for wooting the current song if you don't like the song i suggest you remain neutral");
-                        }
-                        if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            swagbot.misc.ready = false;
-                            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
-                        }
-                        break;
-                                    */
-                    case "commands":
-                        if(typeof command[1] == "undefined"){
-              API.sendChat("User Commands -| Rules | Roll | Punish | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
-                        }else if(command[1].indexOf("@") > -1){
-                          ("User Commands -| Rules | Roll | Punish | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
-                        }else{
-                          ("User Commands -| Rules | Roll | Punish | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
+                          ("User Commands -| Rules | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }
                         if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
                             swagbot.misc.ready = false;
@@ -594,23 +564,7 @@ case "votes":
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
                         break;
-						 /*
-					case "whymeh":
-                        if(typeof command[1] == "undefined"){
-                            API.sendChat("Reserve Mehs for songs that are a) extremely overplayed b) off genre c) absolutely god awful or d) troll songs. ");
-                        }else if(command[1].indexOf("@") > -1){
-                            API.sendChat(command[1]+" Reserve Mehs for songs that are a) extremely overplayed b) off genre c) absolutely god awful or d) troll songs. ");
-                        }else{
-                            API.sendChat("Reserve Mehs for songs that are a) extremely overplayed b) off genre c) absolutely god awful or d) troll songs. ");
-                        }
-                        if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            swagbot.misc.ready = false;
-                            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
-                        }
-                        break;
-                                  */
-                           
-                    case "songlink":
+			case "songlink":
                         if(API.getMedia().format == 1){
                             API.sendChat("@" + data.from + " " + "Songlink @ http://youtu.be/" + API.getMedia().cid);
                         }else{
@@ -718,15 +672,7 @@ case "votes":
                         }
                     }
                         break;
-						
-/*
-                    case "autowoot":
-                        API.sendChat("https://github.com/McKiller5252/AutoWoot");
-                        if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            swagbot.misc.ready = false;
-                            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
-                        }*/
-                        break;/*
+                        /*
 					case "residentdj":
                     case "residentdjs":
                         if(swagbot.admins.indexOf(fromID) > -1 || API.getStaff().permission > 2){
@@ -775,7 +721,7 @@ case "votes":
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
                         break;
-                        
+                            */
                     case "ba":
                     case "brandambassador":
                     case "ambassador":
@@ -787,7 +733,7 @@ case "votes":
                             swagbot.misc.ready = false;
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
-                        break;   */
+                        break;
 					
 					case "help":
                         if(typeof command[1] == "undefined"){
@@ -1100,52 +1046,6 @@ case "votes":
             }
             if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 ||API.getUser(fromID).permission > 1){
                 switch(command[0].toLowerCase()){
-                    /*
-                       case "taco":
-                        if(typeof command[1] == "undefined"){
-                            var crowd = API.getUsers();
-                            var randomUser = Math.floor(Math.random() * crowd.length);
-                            var randomTaco = Math.floor(Math.random() * swagbot.misc.tacos.length);
-                            var randomSentence = Math.floor(Math.random() * 3);
-                            switch(randomSentence){
-                                case 0:
-                                    API.sendChat("@" + crowd[randomUser].username + ", take this " + swagbot.misc.tacos[randomTaco] + "!");
-                                    break;
-                                case 1:
-                                    API.sendChat("@" + crowd[randomUser].username + ", quickly! Eat this " + swagbot.misc.tacos[randomTaco] + " before I do!");
-                                    break;
-                                case 2:
-                                    API.sendChat("One free " + swagbot.misc.tacos[randomTaco] + " for you, @" + crowd[randomUser].username + ". :3");
-                                    break;
-                                case 3:
-                                    API.sendChat("/me throws a " + swagbot.misc.tacos[randomTaco] + " at @" + crowd[randomUser].username + "!");
-                                    break;
-                            }
-                        }else{
-                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
-                            var randomTaco = Math.floor(Math.random() * swagbot.misc.tacos.length);
-                            var randomSentence = Math.floor(Math.random() * 3);
-                            switch(randomSentence){
-                                case 0:
-                                    API.sendChat("@" + botMethods.cleanString(command[1]) + ", take this " + swagbot.misc.tacos[randomTaco] + "!");
-                                    break;
-                                case 1:
-                                    API.sendChat("@" + botMethods.cleanString(command[1]) + ", quickly! Eat this " + swagbot.misc.tacos[randomTaco] + " before I do!");
-                                    break;
-                                case 2:
-                                    API.sendChat("One free " + swagbot.misc.tacos[randomTaco] + " for you, @" + botMethods.cleanString(command[1]) + ". :3");
-                                    break;
-                                case 3:
-                                    API.sendChat("/me throws a " + swagbot.misc.tacos[randomTaco] + " at @" + botMethods.cleanString(command[1]) + "!");
-                                    break;
-                            }
-                        }
-                        if(swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
-                            swagbot.misc.ready = false;
-                            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
-                        }
-                        break;
-*/
                     case "hug":
                         if(typeof command[1] == "undefined"){
                             var crowd = API.getUsers();
@@ -1196,70 +1096,7 @@ case "votes":
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
                         break;
-/*
-        case "punish":
-          if(typeof command[1] == "@"){
-            var crowd = API.getUsers();
-            var randomUser = Math.floor(Math.random() * crowd.length);
-            var randomSentence = Math.floor(Math.random() * 6);
-            switch(randomSentence){
-              case 0:
-                API.sendChat("/me rubs sandpaper on @"+command[1]+"'s scrotum");
-                break;
-              case 1:
-                API.sendChat("/me penetrates @"+command[1]+" with a sharpie");
-                break;
-              case 2:
-                API.sendChat("/me pokes @"+command[1]+" in the eyes");
-                break;
-              case 3:
-                API.sendChat("/me makes @"+command[1]+"'s mother cry");
-                break;
-              case 4:
-                API.sendChat("/me pinches @"+command[1]+"'s nipples super hard");
-                break;
-              case 5:
-                API.sendChat("/me gives @"+command[1]+" a wet willy");
-                break;
-
-              case 6:
-                API.sendChat("/me Sets @"+command[1]+" hair on fire");
-                break;
-            }
-          }else{
-            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
-            var randomSentence = Math.floor(Math.random() * 6);
-            switch(randomSentence){
-              case 0:
-                API.sendChat("/me rubs sandpaper on @"+command[1]+"'s scrotum");
-                break;
-              case 1:
-                API.sendChat("/me penetrates @"+command[1]+" with a sharpie");
-                break;
-              case 2:
-                API.sendChat("/me pokes @"+command[1]+" in the eyes");
-                break;
-              case 3:
-                API.sendChat("/me makes @"+command[1]+"'s mother cry");
-                break;
-              case 4:
-                API.sendChat("/me pinches @"+command[1]+"'s nipples super hard");
-                break;
-              case 5:
-                API.sendChat("/me gives @"+command[1]+" a wet willy");
-                break;
-
-              case 6:
-                API.sendChat("/me Sets @"+command[1]+" hair on fire");
-                break;
-            }
-          }
-          if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-            swagbot.misc.ready = false;
-            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
-          }
-          */
-                    case "cookie":
+                     case "cookie":
                         if(typeof command[1] == "undefined"){
                             var crowd = API.getUsers();
                             var randomUser = Math.floor(Math.random() * crowd.length);
