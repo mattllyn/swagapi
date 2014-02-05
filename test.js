@@ -1,6 +1,7 @@
 var swagbot = {};
 var ruleSkip = {};
 var songBoundary = 60 * 7;
+
 swagbot.misc = {};
 swagbot.settings = {};
 swagbot.moderators = {};
@@ -253,7 +254,7 @@ function listener(data)
     }
  
     var title = API.getMedia().title;
-    var author = API.getMedia().author;
+    var author = data.media.author;
     for (var i = 0; i < blockedSongs.length; i++)
     {
         if (title.indexOf(blockedSongs[i]) != -1 || author.indexOf(blockedArtists[i]) != -1)
