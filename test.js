@@ -59,7 +59,7 @@ var blockedSongs = [
     "The Fox [Official music video HD]",
     "vine",
     "parody",
-    "Yuki Yuki Yuki",
+    "Yuno Gasai",
     "Yuki",
     "10 hour",
     "10 hours"];
@@ -73,7 +73,7 @@ var blockedArtists = [
     "Drake",
     "2 Chainz",
     "2Chainz",
-    "Canuco Zumby"];
+    "Yuno Gasai"];
 swagbot.misc.ball = [" It is certain",
 " It is decidedly so",
 " Without a doubt",
