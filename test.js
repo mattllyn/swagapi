@@ -54,6 +54,7 @@ var blockedSongs = [
     "Rick Roll",
     "GANGNAM",
     "GANGNAM STYLE",
+    "Rebecca Black",
     "The Fox",
     "The Fox [Official music video HD]",
     "vine",
