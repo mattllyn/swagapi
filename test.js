@@ -587,7 +587,8 @@ botMethods.djAdvanceEvent = function(data){
                 }else{
                     API.sendChat("I don't have any data for this song!");
                 }
-            }break;
+            }
+             break;
                        
 
                     case "djinfo":
