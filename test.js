@@ -79,7 +79,7 @@ var blockedSongs = [
     "The Fox [Official music video HD]",
     "vine",
     "vines",
-    "Nirvana - Girls (Dj Dima house)",
+    "Girls",
     "parody",
     "parodys",
     "Yuki",
@@ -90,6 +90,7 @@ var blockedSongs = [
  
 var blockedArtists = [
     "Rick Astley",
+    "Nirvana",
     "Miley Cyrus",
     "Justin bieber",
     "Rebbeca black",
@@ -410,7 +411,7 @@ botMethods.djAdvanceEvent = function(data){
 
         case "time":
           if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
-            API.sendChat("It's " + mytime + " Central Time Zone!");
+            API.sendChat("It's " + mytime + " Central Time Zone!(WIP May be stuck)");
             swagbot.misc.ready = false;
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
