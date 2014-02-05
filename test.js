@@ -1052,7 +1052,7 @@ case "votes":
                         }
                         break;
 case "uptime":
-                        if(swagbot.admins.indexOf(fromID) > -1){
+                        if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
                             var response = "";
                             var currentTime = new Date().getTime();
                             var minutes = Math.floor((currentTime - joined) / 60000);
@@ -1061,14 +1061,14 @@ case "uptime":
                                 minutes = minutes - 60;
                                 hours++;
                             }
-                            hours == 0 ? response = "Running for " + minutes + "m " : response = "Running for " + hours + "h " + minutes + "m";+ swagbot.settings.removedFilter;
-                          
-                        break;  API.sendChat(response);
+                            hours == 0 ? response = "Running for " + minutes + "m " : response = "Running for " + hours + "h " + minutes + "m";
+                            API.sendChat(response);
                         }
+                        break;
                           
 
                      case "status":
-                        if(swagbot.admins.indexOf(fromID) > -1){
+                        if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
                             var response = "";
                             var currentTime = new Date().getTime();
                             var minutes = Math.floor((currentTime - joined) / 60000);
@@ -1084,10 +1084,11 @@ case "uptime":
                             response = response + " | History filter: "+swagbot.settings.historyFilter;
                             response = response + " | MaxLength: " + swagbot.settings.maxLength + "m";
                             response = response + " | Cooldown: " + swagbot.settings.cooldown + "s";
+                            response = response + " | RuleSkip: "+ swagbot.settings.ruleSkip;
                             response = response + " | Removed Video Filter: "+ swagbot.settings.removedFilter;
-                          
-                        break;  API.sendChat(response);
+                            API.sendChat(response);
                         }
+                        break;
  
 
                     case "cooldown":
