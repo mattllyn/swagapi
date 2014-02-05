@@ -853,9 +853,14 @@ case "votes":
 						var arg = $('#chat-messages').children();
 						       for(var i=0;i<arg.length;i++) API.moderateDeleteChat(arg[i].className.substr(arg[i].className.indexOf('cid-')+4,14));
                         deleteAll = true;
-						API.sendChat('Chat Cleared!');
-						}
+			  setTimeout(function(){			
+                          API.sendChat('Chat Cleared!');
+						}, 850);
+                        }
                         break;
+
+
+
 
                     case "lockskip":
                      if(API.getUser(data.fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
