@@ -1,6 +1,8 @@
 var swagbot = {};
 var ruleSkip = {};
 var songBoundary = 60 * 7;
+var announcementTick = 60 * 7;
+var lastAnnouncement = 0;
 
 swagbot.misc = {};
 swagbot.settings = {};
@@ -50,6 +52,9 @@ swagbot.filters.swearWords = ["slut","feg","fegs","yuki-ki","mofo","penis","penu
 swagbot.filters.racistWords = ["nigger","kike","spick","porchmonkey","camel jockey","towelhead","towel head","chink","gook","porch monkey","Coolie","nigga","nigguh","black shit","black monkey","you ape","you monkey","you gorilla","black ass","assnigger","honkey","White bread","white ass","jungle bunny","niglet","nigaboo","paki","ruski","sand nigger","sandnigger","wetback","wet back"];
 
 swagbot.filters.beggerWords = ["fanme","fan for fan","fan me","fan4fan","fan 4 fan","fan pls","fans please","need fan","more fan","fan back","give me fans","gimme fans"];
+
+var announcements = 
+["Create a playlist and populate it with songs from either YouTube or Soundcloud. Click the 'Join Waitlist' button and wait your turn to play music.","View the room rules with !rules","Need help? Use !help "];
 
 var blockedSongs = [
     "Rick Roll",
