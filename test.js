@@ -1,8 +1,23 @@
 var swagbot = {};
 var ruleSkip = {};
 var songBoundary = 60 * 7;
-var announcementTick = 220 * 7;
-var lastAnnouncement = 0;
+//var announcementTick = 60 * 7;
+//var lastAnnouncement = 0;
+var currentTime = new Date() 
+var hours = currentTime.getHours() 
+var minutes = currentTime.getMinutes() 
+var ampm 
+if (hours > 11) { 
+ampm = ("PM") 
+} else { 
+ampm = ("AM") 
+} 
+hours = (hours > 12) ? hours - 12 : hours; 
+hours = (hours == '00') ? 12 : hours; 
+if (minutes < 10) { 
+minutes = "0" + minutes 
+} 
+var mytime = (hours + ":" + minutes + " " + ampm) 
 
 swagbot.misc = {};
 swagbot.settings = {};
@@ -53,8 +68,8 @@ swagbot.filters.racistWords = ["nigger","kike","spick","porchmonkey","camel jock
 
 swagbot.filters.beggerWords = ["fanme","fan for fan","fan me","fan4fan","fan 4 fan","fan pls","fans please","need fan","more fan","fan back","give me fans","gimme fans"];
 
-var announcements = 
-["Create a playlist and populate it with songs from either YouTube or Soundcloud. Click the 'Join Waitlist' button and wait your turn to play music.","View the room rules with !rules","Need help? Use !help "];
+//var announcements = 
+//["Create a playlist and populate it with songs from either YouTube or Soundcloud. Click the 'Join Waitlist' button and wait your turn to play music.","View the room rules with !rules","Need help? Use !help "];
 
 var blockedSongs = [
     "Rick Roll",
@@ -187,7 +202,7 @@ swagbot.pubVars.skipOnExceed;
 swagbot.pubVars.command = false;
 
 Array.prototype.remove=function(){var c,f=arguments,d=f.length,e;while(d&&this.length){c=f[--d];while((e=this.indexOf(c))!==-1){this.splice(e,1)}}return this};
-window.setInterval(sendAnnouncement, 1000 * announcementTick);
+//window.setInterval(sendAnnouncement, 1000 * announcementTick);
  
 API.on(API.DJ_ADVANCE, djAdvanceEvent);
  
@@ -214,18 +229,6 @@ function grab() {
   }
     });
 }
-function sendAnnouncement()
-{
-        if (lastAnnouncement++ >= announcements.length - 1)
-        {
-                lastAnnouncement = 0;
-        }
-    chatMe(announcements[lastAnnouncement]);
-}
-function chatMe(msg)
-{
-        API.sendChat(msg);
-};
 API.on(API.CURATE_UPDATE, callback);
 function callback(obj)
 {
@@ -299,6 +302,19 @@ function listener(data)
     API.moderateForceSkip();
     chatMe("Skipping song because it has exceeded the song limit (" + (songBoundary / 60) + " minutes.)");
 }
+//function sendAnnouncement()
+//{
+ //       if (lastAnnouncement++ >= announcements.length - 1)
+ //       {
+  //              lastAnnouncement = 0;
+   //     }
+  //  chatMe(announcements[lastAnnouncement]);
+//}
+ 
+function chatMe(msg)
+{
+        API.sendChat(msg);
+};
 botMethods.getID = function(username){
     var users = API.getUsers();
     var result = "";
@@ -311,6 +327,8 @@ botMethods.getID = function(username){
 
     return "notFound";
 };
+
+
 
 botMethods.cleanString = function(string){
     return string.replace(/&#39;/g, "'").replace(/&amp;/g, "&").replace(/&#34;/g, "\"").replace(/&#59;/g, ";").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
@@ -1008,7 +1026,6 @@ case "votes":
                         botMethods.save();
                         break;
 
-                    case "ver":
                     case "version":
                         API.sendChat("SwagBot Script version " + swagbot.misc.version);
                         if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
@@ -1450,6 +1467,13 @@ case "votes":
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                 }
             }
+    if(msg.indexOf('what time is it') > -1){
+                API.sendChat("It's " + mytime + " somewhere in the cyberspace!");
+                if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                    swagbot.misc.ready = false;
+                    setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                }
+            }
             if(msg.indexOf(':yuno:') > -1){
                 API.sendChat('/me ლ(ಥ益ಥლ');
                 if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
@@ -1472,6 +1496,13 @@ case "votes":
                 }
             
         }
+
+
+
+
+
+
+
         if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
             if(msg.indexOf("how are you bot") !== -1 || msg.indexOf("bot how are you") !== -1 || msg.indexOf("hru bot") !== -1 || msg.indexOf("bot hru") !== -1 || msg.indexOf("doing good bot?") !== -1 || msg.indexOf("bot doing good?") !== -1 || msg.indexOf("hows it going bot") !== -1 || msg.indexOf("bot how is it going") !== -1 || msg.indexOf("how you doing bot") !== -1 || msg.indexOf("bot how you doing") !== -1){
                 var HRUMsg = ["I'm good thanks for asking :)","Doing great yo and yourself?","All Good Mate!","I'm good thanks for asking!","Yeee i'm cool and youself yo?"];
