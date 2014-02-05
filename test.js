@@ -577,6 +577,7 @@ case "votes":
                             swagbot.misc.ready = false;
                             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                         }
+                         /*
                         break;case "punish":
           if(typeof command[1] == "@"){
             var crowd = API.getUsers();
@@ -633,7 +634,7 @@ case "votes":
                 API.sendChat("/me Sets @"+command[1]+" hair on fire");
                 break;
             }
-          }
+          }*/
           if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
             swagbot.misc.ready = false;
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
@@ -801,7 +802,7 @@ case "votes":
                         deleteAll = true;
 			  setTimeout(function(){			
                           API.sendChat('Chat Cleared!');
-						}, 850);
+						}, 950);
                         }
                         break;
 
