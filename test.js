@@ -1468,7 +1468,7 @@ case "votes":
                 }
             }
     if(msg.indexOf('what time is it') > -1){
-                API.sendChat("It's " + mytime + " somewhere in the cyberspace!");
+                API.sendChat("It's " + mytime + " CTZ!");
                 if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
                     swagbot.misc.ready = false;
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
