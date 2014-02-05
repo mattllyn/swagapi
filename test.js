@@ -1,7 +1,7 @@
 var swagbot = {};
 var ruleSkip = {};
 var songBoundary = 60 * 7;
-var announcementTick = 60 * 7;
+var announcementTick = 220 * 7;
 var lastAnnouncement = 0;
 
 swagbot.misc = {};
