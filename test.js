@@ -53,8 +53,11 @@ swagbot.filters.beggerWords = ["fanme","fan for fan","fan me","fan4fan","fan 4 f
 var blockedSongs = [
     "Rick Roll",
     "GANGNAM",
+    "GANGNAM STYLE",
     "The Fox",
     "The Fox [Official music video HD]",
+    "vine",
+    "parody",
     "10 hour"
 ];
  
