@@ -59,8 +59,10 @@ var blockedSongs = [
     "The Fox",
     "The Fox [Official music video HD]",
     "vine",
+    "vines",
+    "Nirvana - Girls (Dj Dima house)",
     "parody",
-    "Yuno Gasai",
+    "parodys",
     "Yuki",
     "10 hour",
     "10 hours"];
