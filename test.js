@@ -555,7 +555,7 @@ botMethods.djAdvanceEvent = function(data){
                         break;
                       case "commands":
                         if(typeof command[1] == "undefined"){
-              API.sendChat("User Commands -| Rules | Adblock | emoji | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
+              API.sendChat("User Commands -| Rules | wiki | Define | Adblock | emoji | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }else if(command[1].indexOf("@") > -1){
                          ("User Commands -| Rules | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }else{
@@ -595,11 +595,29 @@ case "votes":
           }else{
             API.sendChat("@"+ data.from +" What are you an idiot?");
           }
-          if(Countrybot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-            Countrybot.misc.ready = false;
-            setTimeout(function(){ Countrybot.misc.ready = true; }, Countrybot.settings.cooldown * 1000);
+          if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+            swagbot.misc.ready = false;
+            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
-          break;
+          break;case "wiki":
+          if(typeof command[1] == "undefined"){
+            API.sendChat("@"+data.from+" https://en.wikipedia.org/wiki/Special:Random");
+          }else{
+            var r = data.message.substring(6).replace(g, "_");
+            $.getJSON("http://jsonp.appspot.com/?callback=?&url=" + escape("http://en.wikipedia.org/w/api.php?action=query&prop=links&format=json&titles="+r.replace(g,"_")),
+                function(wikiData){
+                  if (!wikiData || !wikiData.query || !wikiData.query.pages);
+                  return API.sendChat("@"+data.from+" http://en.wikipedia.org/wiki/"+r+" (NOT GUARANTEED TO BE CORRECT)");
+                  if (wikiData.query.pages[-1]) {
+                    API.sendChat("@"+data.from+" article not found");
+                  }else{
+                    for (var i in wikiData.query.pages)
+              // note: the #... is just to make the url look nicer
+              return API.sendChat("@"+data.from+" https://en.wikipedia.org/wiki/?curid="+i+"#"+escape(wikiData.query.pages[i].title) );
+                  }
+                }
+                );
+          }
 			case "songlink":
                         if(API.getMedia().format == 1){
                             API.sendChat("@" + data.from + " " + "Songlink @ http://youtu.be/" + API.getMedia().cid);
