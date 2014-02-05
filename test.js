@@ -13,7 +13,7 @@ toSave.settings = swagbot.settings;
 toSave.moderators = swagbot.moderators;
 toSave.ruleSkip = ruleSkip;
 
-swagbot.misc.version = "1.0";
+swagbot.misc.version = "2.0";
 swagbot.misc.origin = "This bot was created by Sidewinder.";
 swagbot.misc.changelog = "Info1";
 swagbot.misc.ready = true;
@@ -59,8 +59,10 @@ var blockedSongs = [
     "The Fox [Official music video HD]",
     "vine",
     "parody",
-    "10 hours",
-];
+    "Yuki Yuki Yuki",
+    "Yuki",
+    "10 hour",
+    "10 hours"];
  
 var blockedArtists = [
     "Rick Astley",
@@ -71,8 +73,7 @@ var blockedArtists = [
     "Drake",
     "2 Chainz",
     "2Chainz",
-    "Canuco Zumby",
-];
+    "Canuco Zumby"];
 swagbot.misc.ball = [" It is certain",
 " It is decidedly so",
 " Without a doubt",
