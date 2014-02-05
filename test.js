@@ -415,8 +415,6 @@ botMethods.djAdvanceEvent = function(data){
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
           break;
-                       
-
                     case "djinfo":
                         if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
                             var total = + API.getDJ().djPoints + API.getDJ().listenerPoints + API.getDJ().curatorPoints;
