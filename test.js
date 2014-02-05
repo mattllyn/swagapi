@@ -364,7 +364,7 @@ botMethods.djAdvanceEvent = function(data){
         case "op":
         case "overplayed":
           if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
-            API.sendChat("@" + data.from + " " + "Oveplayed List http://pastebin.com/Qj8pLGCL");
+            API.sendChat("@" + data.from + " " + " Oveplayed List http://pastebin.com/Qj8pLGCL");
             swagbot.misc.ready = false;
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
@@ -373,7 +373,7 @@ botMethods.djAdvanceEvent = function(data){
         case "bl":
         case "blacklist":
           if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
-            API.sendChat("@" + data.from + " " + "Blacklist http://pastebin.com/xf8LMAwt");
+            API.sendChat("@" + data.from + " " + " Blacklist http://pastebin.com/xf8LMAwt");
             swagbot.misc.ready = false;
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
@@ -382,7 +382,7 @@ botMethods.djAdvanceEvent = function(data){
         case "facebook":
         case "fb":
           if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
-            API.sendChat(data.from +" Please join our facebook group here: www.facebook.com/swagcraftmc");
+            API.sendChat("@" + data.from + " " + " Please join our facebook group here: www.facebook.com/swagcraftmc");
             swagbot.misc.ready = false;
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
@@ -390,7 +390,7 @@ botMethods.djAdvanceEvent = function(data){
 
         case "adblock":
           if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
-            API.sendChat(data.from +"Get AdBlock here: http://getadblock.com");
+            API.sendChat("@" + data.from + " " + " Get AdBlock here: http://getadblock.com");
             swagbot.misc.ready = false;
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
@@ -398,7 +398,7 @@ botMethods.djAdvanceEvent = function(data){
 
         case "emoji":
           if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
-            API.sendChat(data.from + "Emoji list: http://www.emoji-cheat-sheet.com/");
+            API.sendChat("@" + data.from + " " + " Emoji list: http://www.emoji-cheat-sheet.com/");
             swagbot.misc.ready = false;
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
           }
