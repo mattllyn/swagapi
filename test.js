@@ -308,7 +308,7 @@ function listener(data)
  //       {
   //              lastAnnouncement = 0;
    //     }
-    chatMe(announcements[lastAnnouncement]);
+ //   chatMe(announcements[lastAnnouncement]);
 //}
  
 function chatMe(msg)
