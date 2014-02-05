@@ -350,6 +350,14 @@ botMethods.djAdvanceEvent = function(data){
                             API.sendChat(command[1]);
                         }
                     }
+                        break; 
+                       case "test":
+                    if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
+                        if(typeof command[1] === "undefined"){
+                            }else{
+                            API.sendChat("Should require ResidentDJ);
+                        }
+                    }
                         break;
 
                     case "djinfo":
