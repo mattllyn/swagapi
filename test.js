@@ -1008,6 +1008,7 @@ case "votes":
                         botMethods.save();
                         break;
 
+                    case "ver":
                     case "version":
                         API.sendChat("SwagBot Script version " + swagbot.misc.version);
                         if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
