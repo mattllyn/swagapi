@@ -407,6 +407,14 @@ botMethods.djAdvanceEvent = function(data){
                         }
                     }
                         break; 
+
+        case "time":
+          if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
+            API.sendChat("It's " + mytime + " Central Time Zone!");
+            swagbot.misc.ready = false;
+            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+          }
+          break;
                        
 
                     case "djinfo":
@@ -612,11 +620,11 @@ botMethods.djAdvanceEvent = function(data){
                         break;
                       case "commands":
                         if(typeof command[1] == "undefined"){
-              API.sendChat("User Commands -| Rules | wiki | Define | Adblock | emoji | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
+              API.sendChat("User Commands -| Rules | wiki | time | Define | Adblock | emoji | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }else if(command[1].indexOf("@") > -1){
-                         ("User Commands -| Rules | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
+                        ("User Commands -| Rules | wiki | time | Define | Adblock | emoji | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }else{
-                          ("User Commands -| Rules | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
+                        ("User Commands -| Rules | wiki | time | Define | Adblock | emoji | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }
                         if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
                             swagbot.misc.ready = false;
