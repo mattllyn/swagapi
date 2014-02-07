@@ -1,8 +1,11 @@
 var swagbot = {};
 var ruleSkip = {};
 var songBoundary = 60 * 7;
+
+var lock = new Boolean();
 //var announcementTick = 60 * 7;
 //var lastAnnouncement = 0;
+//old time
 var currentTime = new Date() 
 var hours = currentTime.getHours() 
 var minutes = currentTime.getMinutes() 
@@ -18,6 +21,7 @@ if (minutes < 10) {
 minutes = "0" + minutes 
 } 
 var mytime = (hours + ":" + minutes + " " + ampm) 
+//old time end
 swagbot.misc = {};
 swagbot.settings = {};
 swagbot.moderators = {};
@@ -668,11 +672,11 @@ break;
                         break;
                       case "commands":
                         if(typeof command[1] == "undefined"){
-              API.sendChat("User Commands -| Rules | wiki | time | Define | Adblock | emoji | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
+              API.sendChat("User Commands -| Rules | wiki | time | date | Define | Adblock | emoji | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }else if(command[1].indexOf("@") > -1){
-                        ("User Commands -| Rules | wiki | time | Define | Adblock | emoji | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
+                        ("User Commands -| Rules | wiki | time | date | Define | Adblock | emoji | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }else{
-                        ("User Commands -| Rules | wiki | time | Define | Adblock | emoji | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
+                        ("User Commands -| Rules | wiki | time | date | Define | Adblock | emoji | Roll | overplayed | blacklist | Fortune | 8ball | Flipcoin | Help | Songlink | cookie | hug | marco | slap|");
                         }
                         if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
                             swagbot.misc.ready = false;
@@ -1540,7 +1544,7 @@ case "uptime":
                 }
             }
     if(msg.indexOf('what time is it') > -1){
-                API.sendChat("It's " + mytime + " Central Time Zone!");
+               API.sendChat( "Time: " + hr + "h:" + min + "m:" + sec +"s" );
                 if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
                     swagbot.misc.ready = false;
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
