@@ -312,6 +312,17 @@ function listener(data)
  //   chatMe(announcements[lastAnnouncement]);
 //}
  
+//grabs the unix timestamp
+function time() {
+    return Math.round((new Date()).getTime() / 1000);    
+}
+
+
+
+
+
+
+
 function chatMe(msg)
 {
         API.sendChat(msg);
@@ -409,12 +420,34 @@ botMethods.djAdvanceEvent = function(data){
                     }
                         break; 
 
-        case "time":
-          if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
-            API.sendChat("It's " + mytime + " Central Time Zone!(WIP May be stuck)");
-            swagbot.misc.ready = false;
+    //Time
+        case "time": time(); break;
+        case "date": datetime(); break;  
+  function datetime()         //date & time
+    {
+        var currentDate = new Date()            //reset date
+        var day = currentDate.getDate()         //dd
+        var month = currentDate.getMonth() + 1  //mm
+        var year = currentDate.getFullYear()    //yyyy
+        var hr = currentDate.getHours()         //hh
+        var min = currentDate.getMinutes()      //mm
+        var sec = currentDate.getSeconds()      //ss
+        API.sendChat( "Date: " + day + "/" + month + "/" + year + " Time: " + hr + "h:" + min + "m:" + sec +"s" );
+    swagbot.misc.ready = false;
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
-          }
+      }
+
+
+
+
+
+
+      //  case "time":
+         // if(API.getUser(fromID).permission < 2 || swagbot.admins.indexOf(fromID) > -1){
+         //   API.sendChat("It's " + mytime + " Central Time Zone!(WIP May be stuck)");
+          //  swagbot.misc.ready = false;
+         //   setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+         // }
           break;
                     case "djinfo":
                         if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
