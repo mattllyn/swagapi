@@ -421,7 +421,6 @@ botMethods.djAdvanceEvent = function(data){
                         break; 
 
     //Time
-        case "time": time(); break;
         case "date": datetime(); break;  
   function datetime()         //date & time
     {
@@ -436,7 +435,25 @@ botMethods.djAdvanceEvent = function(data){
     swagbot.misc.ready = false;
             setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
       }
-
+break;
+                 
+    //Time
+        case "time": time(); break;
+       function time()         //date & time
+    {
+        var currentDate = new Date()            //reset date
+        var day = currentDate.getDate()         //dd
+        var month = currentDate.getMonth() + 1  //mm
+        var year = currentDate.getFullYear()    //yyyy
+        var hr = currentDate.getHours()         //hh
+        var min = currentDate.getMinutes()      //mm
+        var sec = currentDate.getSeconds()      //ss
+        API.sendChat( "Time: " + hr + "h:" + min + "m:" + sec +"s" );
+    swagbot.misc.ready = false;
+            setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+      }
+break;
+                 
 
 
 
@@ -448,8 +465,7 @@ botMethods.djAdvanceEvent = function(data){
           //  swagbot.misc.ready = false;
          //   setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
          // }
-          break;
-                    case "djinfo":
+             case "djinfo":
                         if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
                             var total = + API.getDJ().djPoints + API.getDJ().listenerPoints + API.getDJ().curatorPoints;
                             API.sendChat("Current dj is: "+ API.getDJ().username +". Points: "+ total +" | Fans: "+API.getDJ().fans+" | Curated: "+ API.getDJ().curatorPoints +".");
