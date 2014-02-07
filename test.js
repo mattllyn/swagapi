@@ -77,6 +77,7 @@ swagbot.filters.beggerWords = ["fanme","fan for fan","fan me","fan4fan","fan 4 f
 var blockedSongs = [
     "Rick Roll",
     "GANGNAM",
+    "Dickhead",
     "GANGNAM STYLE",
     "Friday",
     "The Fox",
@@ -95,6 +96,7 @@ var blockedSongs = [
 var blockedArtists = [
     "Rick Astley",
     "Nirvana",
+    "Mad Child",
     "Miley Cyrus",
     "Justin bieber",
     "Rebbeca black",
@@ -1543,13 +1545,13 @@ case "uptime":
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                 }
             }
-    if(msg.indexOf('what time is it') > -1){
-               API.sendChat( "Time: " + hr + "h:" + min + "m:" + sec +"s" );
-                if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                    swagbot.misc.ready = false;
-                    setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
-                }
-            }
+   // if(msg.indexOf('what time is it') > -1){
+       //        API.sendChat( "Time: " + hr + "h:" + min + "m:" + sec +"s" );
+         //       if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+          //          swagbot.misc.ready = false;
+            //        setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+           //     }
+            //}
             if(msg.indexOf(':yuno:') > -1){
                 API.sendChat('/me ლ(ಥ益ಥლ');
                 if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
