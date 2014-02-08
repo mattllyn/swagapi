@@ -1,16 +1,6 @@
 var swagbot = {};
 var ruleSkip = {};
 var songBoundary = 60 * 7;
-
-
-
-
-
-
-
-
-
-
 var lock = new Boolean();
 //var announcementTick = 60 * 7;
 //var lastAnnouncement = 0;
