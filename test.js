@@ -371,7 +371,7 @@ botMethods.djAdvanceEvent = function(data){
             swagbot.pubVars.skipOnExceed = setTimeout( function(){
                API.sendChat("@"+ API.getDJ().username +" You have now played for as long as this room allows, time to let someone else have the booth!");
              API.moderateForceSkip();
-            }, swagbot.settings.maxLength * 60000);
+            }, swagbot.settings.maxLength * 60);
             API.sendChat("@"+ API.getDJ().username +" This song will be skipped " + swagbot.settings.maxLength + " minutes from now because it exceeds the max song length.");
         }else{
             setTimeout(function(){
