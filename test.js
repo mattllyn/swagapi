@@ -996,7 +996,7 @@ case "votes":
                      API.moderateForceSkip();
 	API.moderateDeleteChat(data.chatID);
                         }else{
-                            API.sendChat("@"+ data.from +"+'@'+API.getDJs()[0].username+' '+command[1]);
+                            API.sendChat("@"+ data.from +'@'+API.getDJs()[0].username+' '+command[1]);
                             API.moderateForceSkip();
                         }
                     }
