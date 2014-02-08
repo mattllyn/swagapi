@@ -212,8 +212,6 @@ swagbot.pubVars.command = false;
 Array.prototype.remove=function(){var c,f=arguments,d=f.length,e;while(d&&this.length){c=f[--d];while((e=this.indexOf(c))!==-1){this.splice(e,1)}}return this};
 //window.setInterval(sendAnnouncement, 1000 * announcementTick);
  
-API.on(API.DJ_ADVANCE, djAdvanceEvent);
- 
 //API.on(API.USER_JOIN, UserJoin);
 //function UserJoin(user)
 //{
