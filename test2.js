@@ -135,29 +135,6 @@
 		};
 		return true;
 	};
-	var dieCommand = function() {
-		this.cmd = '!die';
-		this.priv = 'bouncer';
-		this.type = 'exact';
-		this.functionality = function() {
-			return killBot();
-			
-		};
-		return Command.apply(this, arguments);
-	};
-	var reloadCommand = function() {
-		this.cmd = '!update';
-		this.priv = 'bouncer';
-		this.type = 'exact';
-		this.functionality = function() {
-			var url;
-			url = data.botSrc;
-			API.chatLog('Bot is updating.');
-			killBot();
-			return $.getScript(url);
-		};
-		return Command.apply(this, arguments);
-	};
 	var dcLookUpCommand = function() {
 		this.cmd = '!dclookup';
 		this.priv = 'bouncer';
