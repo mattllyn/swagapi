@@ -272,44 +272,6 @@
 		};
 		return Command.apply(this, arguments);
 	};
-	var rulesCommand = function() {
-		this.cmd = '!rules';
-		this.priv = 'bouncer';
-		this.type = 'exact';
-		this.functionality = function() {
-			return API.sendChat('Please find the room rules here: http://goo.gl/Dg1Sa');
-		};
-		return Command.apply(this, arguments);
-	};
-	var helpCommand = function() {
-		this.cmd = '!help';
-		this.priv = 'user';
-		this.type = 'exact';
-		this.functionality = function() {
-			var from;
-			from = this.cData.from;
-			return API.sendChat('@' + from + ',  http://gg.gg/plugdjhelp');
-		};
-		return Command.apply(this, arguments);
-	};
-	var facebookCommand = function() {
-		this.cmd = '!fb';
-		this.priv = 'bouncer';
-		this.type = 'exact';
-		this.functionality = function() {
-			return API.sendChat('/em: like our facebook page! http://on.fb.me/19L5fsl');
-		};
-		return Command.apply(this, arguments);
-	};
-	var themeCommand = function() {
-		this.cmd = '!theme';
-		this.priv = 'bouncer';
-		this.type = 'exact';
-		this.functionality = function() {
-			return API.sendChat('Please find the permissible room genres here: http://goo.gl/Dg1Sa');
-		};
-		return Command.apply(this, arguments);
-	};
 	var afkCheckCommand = function() {
 		this.cmd = '!afk';
 		this.priv = 'bouncer';
@@ -323,77 +285,6 @@
 				return data.afkRemover = true;
 			}
 		};
-		return Command.apply(this, arguments);
-	};
-	var autoSkipCommand = function() {
-		this.cmd = '!autoskip';
-		this.priv = 'bouncer';
-		this.type = 'exact';
-		this.functionality = function() {
-			if (data.autoSkip) {
-				API.sendChat('Auto Skip disabled.');
-				return data.autoSkip = false;
-			} else {
-				API.sendChat('Auto Skip enabled.');
-				return data.autoSkip = true;
-			}
-		};
-		return Command.apply(this, arguments);
-	};
-	var opCommand = function() {
-		this.cmd = '!op';
-		this.priv = 'bouncer';
-		this.type = 'exact';
-		this.functionality = function() {
-			return API.sendChat('Take a look at the OP list http://goo.gl/ZW6741');
-		}
-		return Command.apply(this, arguments);
-	}
-	var pingCommand = function() {
-		this.cmd = '!ping';
-		this.priv = 'bouncer';
-		this.type = 'starts';
-		this.functionality = function() {
-			var msg, motd;
-			msg = this.cData.message;
-			p = this.cData.fromID;
-			q = msg.substr(6);
-			if (msg.length > 6 && q.substr(0,1) == "@") {
-				return API.sendChat(q + " Pong!");
-			} else {
-				if (msg === this.cmd) {
-					return API.sendChat("@" + API.getUser(p).username + " Pong!");
-				}
-			}
-		};
-		return Command.apply(this, arguments);
-	};
-	var pongCommand = function() {
-		this.cmd = '!pong';
-		this.priv = 'bouncer';
-		this.type = 'starts';
-		this.functionality = function() {
-			var msg, motd;
-			msg = this.cData.message;
-			p = this.cData.fromID;
-			q = msg.substr(6);
-			if (msg.length > 6 && q.substr(0,1) == "@") {
-				return API.sendChat(q + " Pi-- wait what? that ain't a command!");
-			} else {
-				if (msg === this.cmd) {
-					return API.sendChat("@" + API.getUser(p).username + " Pi-- wait what? that ain't a command!");
-				}
-			}
-		};
-		return Command.apply(this, arguments);
-	};
-	var commandsCommand = function() {
-		this.cmd = '!commands';
-		this.priv = 'bouncer';
-		this.type = 'exact';
-		this.functionality = function() {
-			return API.sendChat("commands are: !die, !update, !dclookup, !skip, !lock, !unlock, !stats, !motd, !staff, !rules, !help, !fb, !theme, !afk, !autoskip,!op, !ping");
-		}
 		return Command.apply(this, arguments);
 	};
 	var afkCheck = function() {
@@ -428,7 +319,7 @@
 		}
 	};
 	var opPrint = function() {
-		return API.sendChat('/em: Make sure not play an OP track or you may be skipped! Check the overplayed list to be sure: http://goo.gl/ZW6741');
+		return API.sendChat('/em: Hi (Test)1');
 	};
 	var updateWaitList = function() {
 		return data.setWaitList();
