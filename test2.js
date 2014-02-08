@@ -36,7 +36,6 @@
 			return API.sendChat('');
 			
 		};
-		this.showSongStats = false;
 		this.songsPlayed = 0;
 		this.woots = null;
 		this.mehs = null;
@@ -182,21 +181,6 @@
 		};
 		return Command.apply(this, arguments);
 	};
-	var songStatsCommand = function() {
-		this.cmd = '!stats';
-		this.priv = 'bouncer';
-		this.type = 'exact';
-		this.functionality = function() {
-			if (data.showSongStats) {
-				API.sendChat('Song Stats disabled.');
-				return data.showSongStats = false;
-			} else {
-				API.sendChat('Song Stats enabled.');
-				return data.showSongStats = true;
-			}
-		};
-		return Command.apply(this, arguments);
-	};
 	var motdCommand = function() {
 		this.cmd = '!motd';
 		this.priv = 'bouncer';
@@ -315,7 +299,7 @@
 			return false;
 		}
 	};
-	var cmdList = [dcLookUpCommand,motdCommand,lockCommand,songStatsCommand,afkCheckCommand,staffCommand];
+	var cmdList = [dcLookUpCommand,motdCommand,lockCommand,afkCheckCommand,staffCommand];
 	var onChat = function(c) {
 		var i, cmd, cm;
 		if (c.type === 'message') {
