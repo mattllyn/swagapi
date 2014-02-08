@@ -36,7 +36,7 @@ toSave.ruleSkip = ruleSkip;
 
 swagbot.misc.version = "2.0";
 swagbot.misc.origin = "This bot was created by Sidewinder.";
-swagbot.misc.changelog = "SpaceHolder";
+swagbot.misc.changelog = "Info1";
 swagbot.misc.ready = true;
 swagbot.misc.lockSkipping = false;
 swagbot.misc.lockSkipped = "0";
@@ -57,7 +57,6 @@ swagbot.settings.historyFilter = true;
 swagbot.settings.swearFilter = true;
 swagbot.settings.racismFilter = true;
 swagbot.settings.beggerFilter = true;
-swagbot.settings.welcomeFilter = true;
 swagbot.settings.interactive = true;
 swagbot.settings.ruleSkip = true;
 swagbot.settings.removedFilter = true;
@@ -372,7 +371,7 @@ botMethods.djAdvanceEvent = function(data){
             swagbot.pubVars.skipOnExceed = setTimeout( function(){
                API.sendChat("@"+ API.getDJ().username +" You have now played for as long as this room allows, time to let someone else have the booth!");
              API.moderateForceSkip();
-            }, swagbot.settings.maxLength * 60);
+            }, swagbot.settings.maxLength * 60000);
             API.sendChat("@"+ API.getDJ().username +" This song will be skipped " + swagbot.settings.maxLength + " minutes from now because it exceeds the max song length.");
         }else{
             setTimeout(function(){
@@ -1215,7 +1214,7 @@ case "uptime":
                     case "silence":
                         if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
                             swagbot.settings.interactive = false;
-                            API.sendChat("Sleep Mode!");
+                            API.sendChat("Yessir!");
                         }
                         botMethods.save();
                         break;
@@ -1308,7 +1307,7 @@ case "uptime":
                                     API.sendChat("/me shows @"+crowd[randomUser].username+" the power of friendship. BY SLAPPING THEM WITH A COOKIE");
                                     break;
                                 case 3:
-                                    API.sendChat("/me hands a cookie to @"+crowd[randomUser].username);
+                                    API.sendChat("/me hands an anthrax laced cookie to @"+crowd[randomUser].username);
                                     break;
                             }
                         }else{
@@ -1322,7 +1321,7 @@ case "uptime":
                                     API.sendChat("/me drowns @"+botMethods.cleanString(command[1])+" in batter");
                                     break;
                                 case 2:
-                                    API.sendChat("/me hands a cookie to @"+botMethods.cleanString(command[1]));
+                                    API.sendChat("/me hands an anthrax laced cookie to @"+botMethods.cleanString(command[1]));
                                     break;
                                 case 3:
                                     API.sendChat("/me shows @"+botMethods.cleanString(command[1])+" the power of friendship. BY SLAPPING THEM WITH A COOKIE");
@@ -1546,9 +1545,23 @@ case "uptime":
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                 }
             }
-          }
+   // if(msg.indexOf('what time is it') > -1){
+       //        API.sendChat( "Time: " + hr + "h:" + min + "m:" + sec +"s" );
+         //       if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+          //          swagbot.misc.ready = false;
+            //        setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+           //     }
+            //}
+            if(msg.indexOf(':yuno:') > -1){
+                API.sendChat('/me ლ(ಥ益ಥლ');
+                if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                    swagbot.misc.ready = false;
+                    setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
+                }
+            }
         }
-);
+
+    });
 	
 	API.on(API.CHAT, function(data){
         msg = data.message.toLowerCase(), chatID = data.chatID, fromID = data.fromID;
@@ -1562,7 +1575,13 @@ case "uptime":
             
         }
 
-         if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+
+
+
+
+
+
+        if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
             if(msg.indexOf("how are you bot") !== -1 || msg.indexOf("bot how are you") !== -1 || msg.indexOf("hru bot") !== -1 || msg.indexOf("bot hru") !== -1 || msg.indexOf("doing good bot?") !== -1 || msg.indexOf("bot doing good?") !== -1 || msg.indexOf("hows it going bot") !== -1 || msg.indexOf("bot how is it going") !== -1 || msg.indexOf("how you doing bot") !== -1 || msg.indexOf("bot how you doing") !== -1){
                 var HRUMsg = ["I'm good thanks for asking :)","Doing great yo and yourself?","All Good Mate!","I'm good thanks for asking!","Yeee i'm cool and youself yo?"];
                 API.sendChat("@" + data.from + " " + HRUMsg[Math.floor(Math.random() * HRUMsg.length)]);
@@ -1586,7 +1605,6 @@ case "uptime":
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                 }
         }
-    /*
         if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
             if(msg.indexOf("fuck you bot") !== -1 || msg.indexOf("I hate you bot") !== -1 || msg.indexOf("stupid bot") !== -1 || msg.indexOf("bot fuck you") !== -1 || msg.indexOf("f u bot") !== -1 || msg.indexOf("bot f u") !== -1 || msg.indexOf("fuhk yuh bot") !== -1 || msg.indexOf("bot fuhk you") !== -1){
                 var FuckMsg = ["watch what you are saying to me...","Did you're mom teach you to swear like that?"];
@@ -1604,7 +1622,7 @@ case "uptime":
                 }
         }
         
-    });*/
+    });
 	
     API.on(API.DJ_ADVANCE, DJ_ADVANCE);
     function DJ_ADVANCE(data){
