@@ -324,7 +324,7 @@
 			return false;
 		}
 	};
-	var cmdList = [dcLookUpCommand,skipCommand,motdCommand,dieCommand,reloadCommand,lockCommand,songStatsCommand,afkCheckCommand,staffCommand];
+	var cmdList = [dcLookUpCommand,skipCommand,motdCommand,reloadCommand,lockCommand,songStatsCommand,afkCheckCommand,staffCommand];
 	var onChat = function(c) {
 		var i, cmd, cm;
 		if (c.type === 'message') {
