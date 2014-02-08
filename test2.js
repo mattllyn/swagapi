@@ -18,7 +18,7 @@
 			this.motdInterval = setInterval(motdPrint, 3000000);
 			this.pass = 0;
 			this.added = 0;
-			return API.sendChat('*');
+			//return API.sendChat('');
 		
 		};
 		this.kill = function() {
