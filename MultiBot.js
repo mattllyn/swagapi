@@ -101,8 +101,6 @@ var BOT = {
         inicialize: function() {
             
             
-            BOT.INTERNAL.setMode(false, 'LOADING');
-            
             var bot = API.getUser();
             if(bot['permission'] < API.ROLE.MANAGER) {
                 BOT.INTERNAL.setMode(false, 'NO PERMISSION');
