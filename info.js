@@ -161,19 +161,7 @@ API.on(API.CHAT, function(obj){
                     API.sendChat("I don't have any data for this song!");
                 }
             }
-        /*case "linkify":
-            if(commands[1] === "undefined"){
-                API.sendChat("@" + obj.from + " You need to put a link!");
-            }else if(commands[1].toLowerCase().indexOf("plug.dj" || "bug.dj") === -1){
-            API.sendChat("http://"+commands[1]);
-            }else{
-                API.sendChat("Nice try! Advertising is not allowed in this room.");
-            }
-         break;
-         case "songlink":
-         API.sendChat("@"+obj.from+" "+"http://youtu.be/"+API.getMedia().cid);
-         break;
-         */
+        
 }
 }
 });
