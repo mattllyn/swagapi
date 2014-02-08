@@ -2,6 +2,15 @@ var swagbot = {};
 var ruleSkip = {};
 var songBoundary = 60 * 7;
 
+
+
+
+
+
+
+
+
+
 var lock = new Boolean();
 //var announcementTick = 60 * 7;
 //var lastAnnouncement = 0;
@@ -21,6 +30,207 @@ if (minutes < 10) {
 minutes = "0" + minutes 
 } 
 var mytime = (hours + ":" + minutes + " " + ampm) 
+
+API.on(API.CHAT, gamesticles);
+
+var userChoice = [];
+var targeted = " ";
+var player = " ";
+var name = " ";
+var pastPlayers = [];
+var playing = false;
+var playingWait = 60000;
+var pWait = 300000;
+var playingPassed = 0;
+var pPassed = 0;
+var playingTimer = null;
+var pTimer = null;
+var tpTimer = null;
+var hr = 6E5;
+var chosen = true;
+var gamesPlayed = 0;
+var gamesWon = 0;
+var gamesLost = 0;
+var winMsg = ["I lost, I won't lose the next game", ""];
+var loseMsg = [" You lose"];
+var drawMsg = [" game tied"];
+var quitMsg = ["Why are you quiting?:"];
+var cookieMsg = [" here is your winning cookie :cookie:"];
+var kickMsg = [" you lost!:"];
+var targeted = " ";
+
+
+function gamesticles(data) {
+	var msg = data.message;
+	if (API.getUser(data.fromID).permission >= 1 && msg.indexOf("!start") > -1) {
+		API.sendChat("/me Game Initiated!");
+		setTimeout("targetPlayer()", 1000);
+		tpTimer = setInterval("targetPlayer();", hr);
+	}
+	if (playing == false && player.indexOf(data.fromID) > -1 && msg.indexOf("!pass") > -1) {
+		API.sendChat("/me Player cancelled!");
+		clearInrerval (pTimer);
+		pPassed = 0;
+		target = " ";
+		player = " ";
+		playing = false;
+	}
+        if (playing == false && player.indexOf(data.fromID) > -1 && msg.indexOf("!play") > -1) {
+	        API.sendChat("@" + data.from + " welcome to Rock Paper Scissors.You can quit at anytime by typing /quit.");
+	        API.sendChat("@" + data.from + " Rock Paper or Scissors?");
+	        playing = true;
+		chosen = false;
+        }
+        if (playing == true && player.indexOf(data.fromID) > -1 && msg.indexOf("!quit") > -1) {
+        	API.sendChat("@" + data.from + " " + quitMsg + " Final Score: WON: " + gamesWon + " LOST: " + gamesLost);
+        	playingTimer = setInterval("checkPlaying()", 1000);
+        	userChoice = [];
+        	player = " ";
+        	chosen = true;
+        	gamesWon = 0;
+        	gamesLost = 0;
+        }
+        if (playing == true && chosen == false && player.indexOf(data.fromID) > -1 && msg.indexOf("rock") > -1) {
+        	userChoice.push("ROCK");
+        	chosen = true;
+        	game();
+        }
+        else if (playing == true && chosen == false && player.indexOf(data.fromID) > -1 && msg.indexOf("paper") > -1) {
+        	userChoice.push("PAPER");
+        	chosen = true;
+        	game();
+        }
+        else if (playing == true && chosen == false && player.indexOf(data.fromID) > -1 && msg.indexOf("scissors") > -1) {
+        	userChoice.push("SCISSORS");
+        	chosen = true;
+        	game();
+        }
+}
+
+function game(){
+	var computerChoice = Math.random();
+	if (computerChoice < 0.34) {
+		computerChoice = "ROCK";
+	} 
+	else if(computerChoice <= 0.67) {
+		computerChoice = "PAPER";
+	} 
+	else {
+		computerChoice = "SCISSORS";
+	}
+	var compare = function(choice1, choice2) {
+		if (choice1 == choice2) {
+	        	return drawMsg;
+	    	}
+	    	if (choice1 == "ROCK") {
+	        	if (choice2 == "SCISSORS") {
+	        		gamesWon = gamesWon + 1;
+	            		return "ROCK beats SCISSORS " + winMsg[Math.floor(Math.random() * winMsg.length)];
+	        	}
+	        	else {
+	        		gamesLost = gamesLost + 1;
+	            		return "PAPER beats ROCK " + loseMsg[Math.floor(Math.random() * loseMsg.length)];
+	        	}
+	    	}
+	    	if (choice1 == "PAPER") {
+	        	if (choice2 == "ROCK") {
+	        		gamesWon = gamesWon + 1;
+	            		return "PAPER beats ROCK " + winMsg[Math.floor(Math.random() * winMsg.length)];
+	        	}
+	        	else {
+	        		gamesLost = gamesLost + 1;
+	            		return "SCISSORS beats PAPER " + loseMsg[Math.floor(Math.random() * loseMsg.length)];
+	        	}
+	    	}
+	    	if (choice1 == "SCISSORS") {
+	        	if (choice2 == "PAPER") {
+	        		gamesWon = gamesWon + 1;
+	            		return "SCISSORS beats PAPER " + winMsg[Math.floor(Math.random() * winMsg.length)];
+	        	}
+	        	else {
+	        		gamesLost = gamesLost + 1;
+	            		return "ROCK beats SCISSORS " + loseMsg[Math.floor(Math.random() * loseMsg.length)];
+	        	}
+	    	}
+	};
+	API.sendChat("@" + API.getUser(player).username + " You chose " + userChoice + ", and I chose " + computerChoice + ". " + compare(userChoice, computerChoice));
+	checkStats();
+}
+function targetPlayer(){
+	targeted = API.getUsers()[Math.floor(Math.random() * API.getUsers().length)];
+	player = targeted.id;
+	name = API.getUser(player).username;
+	pastPlayers.push(targeted);
+	API.sendChat("@" + name + " you have been randonly chosen to play rock paper scissors . to play type !play, or to skip type !pass");
+	pTimer = setInterval("checkPassed()", 1000);
+	checkGames();
+}
+function checkGames() {
+	if (gamesPlayed == 5) {
+		clearInterval(tpTimer);
+		clearInterval(tTimer);
+		clearInterval(playingTimer);
+		playing = false;
+		playingPassed = 0;
+	}
+}	
+		
+function checkStats() {
+	if (gamesWon < 3 && gamesLost < 3) {
+		setTimeout('API.sendChat("@" + API.getUser(player).username + " Stats: WON: " + gamesWon + " LOST: " + gamesLost + ". Rock Paper or Scissors?");', 2000);
+		userChoice = [];
+		chosen = false;
+	}
+	if (gamesWon == 3) {
+		setTimeout('API.sendChat("@" + API.getUser(player).username + " Congratulations, " + cookieMsg[Math.floor(Math.random() * cookieMsg.length)]);', 2000);
+		playingTimer = setInterval("checkPlaying()", 1000);
+        	userChoice = [];
+        	setTimeout('player = " ";', 7000);
+        	chosen = true;
+		gamesPlayed = gamesPlayed + 1;
+		playing = false;
+        	gamesWon = 0;
+        	gamesLost = 0;
+	}
+	if (gamesLost == 3) {
+		setTimeout('API.sendChat("@" + API.getUser(player).username + " Shit son, ");', 2000);
+		playingTimer = setInterval("checkPlaying()", 1000);
+                setTimeout('API.sendChat("@" + API.getUser(player).username + " Ouch unlucky. Great game though");', 2000)
+		userChoice = [];
+        	setTimeout('player = " ";', 7000);
+        	chosen = true;
+		gamesPlayed = gamesPlayed + 1;
+		playing = false;
+        	gamesWon = 0;
+        	gamesLost = 0;	
+	}
+
+}
+
+function checkPassed() {
+	if (pPassed >= pWait) {
+		clearInterval (pTimer);
+		pPassed = 0;
+		target = " ";
+		player = " ";
+	}
+	else {
+		pPassed = pPassed + 1000;
+	}
+}
+
+function checkPlaying() {
+	if (playingPassed >= playingWait) {
+		clearInterval(playingTimer);
+		playing = false;
+		playingPassed = 0;
+	}
+	else {
+		playingPassed = playingPassed + 1000;
+	}
+}
+
+
 //old time end
 swagbot.misc = {};
 swagbot.settings = {};
@@ -304,14 +514,10 @@ function listener(data)
         window.setTimeout(skipLongSong, 1000 * songBoundary);
     }
 }
-
-
-
-
  function skipLongSong()
 {
     API.moderateForceSkip();
-    API.sendchat("Skipping song because it has exceeded the song limit (" + (songBoundary / 60) + " minutes.)");
+    chatMe("Skipping song because it has exceeded the song limit (" + (songBoundary / 60) + " minutes.)");
 }
 //function sendAnnouncement()
 //{
@@ -333,7 +539,22 @@ function time() {
 
 
 
+function chatMe(msg)
+{
+        API.sendChat(msg);
+};
+botMethods.getID = function(username){
+    var users = API.getUsers();
+    var result = "";
+    for(var i = 0; i < users.length; i++){
+        if(users[i].username === username){
+            result = users[i].id;
+            return result;
+        }
+    }
 
+    return "notFound";
+};
 
 
 
@@ -356,11 +577,11 @@ botMethods.djAdvanceEvent = function(data){
         }else if(API.getUser().permission > 1){
             API.sendChat("@" + API.getDJ().username + ", playing songs that are in the history isn't allowed, please check next time! Skipping..");
            API.moderateForceSkip();
-        }else if(Media.duration > swagbot.settings.maxLength * 60){
+        }else if(getMedia.duration > swagbot.settings.maxLength * 60){
             swagbot.pubVars.skipOnExceed = setTimeout( function(){
                API.sendChat("@"+ API.getDJ().username +" You have now played for as long as this room allows, time to let someone else have the booth!");
              API.moderateForceSkip();
-            }, swagbot.settings.maxLength * 60);
+            }, swagbot.settings.maxLength * 60000);
             API.sendChat("@"+ API.getDJ().username +" This song will be skipped " + swagbot.settings.maxLength + " minutes from now because it exceeds the max song length.");
         }else{
             setTimeout(function(){
@@ -385,7 +606,38 @@ botMethods.djAdvanceEvent = function(data){
                    API.moderateDeleteChat(data.chatID);
             if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(data.fromID).permission > 1){
                 switch(command[0].toLowerCase()){
-                    case "marco":
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+case "marco":
                         API.sendChat("Polo");
                         if(swagbot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
                             swagbot.misc.ready = false;
@@ -1203,7 +1455,7 @@ case "uptime":
                     case "silence":
                         if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
                             swagbot.settings.interactive = false;
-                            API.sendChat("Sleep Mode!");
+                            API.sendChat("Yessir!");
                         }
                         botMethods.save();
                         break;
@@ -1296,7 +1548,7 @@ case "uptime":
                                     API.sendChat("/me shows @"+crowd[randomUser].username+" the power of friendship. BY SLAPPING THEM WITH A COOKIE");
                                     break;
                                 case 3:
-                                    API.sendChat("/me hands a cookie to @"+crowd[randomUser].username);
+                                    API.sendChat("/me hands an anthrax laced cookie to @"+crowd[randomUser].username);
                                     break;
                             }
                         }else{
@@ -1310,7 +1562,7 @@ case "uptime":
                                     API.sendChat("/me drowns @"+botMethods.cleanString(command[1])+" in batter");
                                     break;
                                 case 2:
-                                    API.sendChat("/me hands a cookie to @"+botMethods.cleanString(command[1]));
+                                    API.sendChat("/me hands an anthrax laced cookie to @"+botMethods.cleanString(command[1]));
                                     break;
                                 case 3:
                                     API.sendChat("/me shows @"+botMethods.cleanString(command[1])+" the power of friendship. BY SLAPPING THEM WITH A COOKIE");
@@ -1593,7 +1845,7 @@ case "uptime":
                     swagbot.misc.ready = false;
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                 }
-        }/*
+        }
         if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
             if(msg.indexOf("fuck you bot") !== -1 || msg.indexOf("I hate you bot") !== -1 || msg.indexOf("stupid bot") !== -1 || msg.indexOf("bot fuck you") !== -1 || msg.indexOf("f u bot") !== -1 || msg.indexOf("bot f u") !== -1 || msg.indexOf("fuhk yuh bot") !== -1 || msg.indexOf("bot fuhk you") !== -1){
                 var FuckMsg = ["watch what you are saying to me...","Did you're mom teach you to swear like that?"];
@@ -1609,7 +1861,7 @@ case "uptime":
                     swagbot.misc.ready = false;
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                 }
-        }*/
+        }
         
     });
 	
