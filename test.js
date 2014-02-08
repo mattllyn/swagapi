@@ -304,10 +304,14 @@ function listener(data)
         window.setTimeout(skipLongSong, 1000 * songBoundary);
     }
 }
+
+
+
+
  function skipLongSong()
 {
     API.moderateForceSkip();
-    chatMe("Skipping song because it has exceeded the song limit (" + (songBoundary / 60) + " minutes.)");
+    API.sendchat("Skipping song because it has exceeded the song limit (" + (songBoundary / 60) + " minutes.)");
 }
 //function sendAnnouncement()
 //{
@@ -329,22 +333,7 @@ function time() {
 
 
 
-function chatMe(msg)
-{
-        API.sendChat(msg);
-};
-botMethods.getID = function(username){
-    var users = API.getUsers();
-    var result = "";
-    for(var i = 0; i < users.length; i++){
-        if(users[i].username === username){
-            result = users[i].id;
-            return result;
-        }
-    }
 
-    return "notFound";
-};
 
 
 
@@ -367,7 +356,7 @@ botMethods.djAdvanceEvent = function(data){
         }else if(API.getUser().permission > 1){
             API.sendChat("@" + API.getDJ().username + ", playing songs that are in the history isn't allowed, please check next time! Skipping..");
            API.moderateForceSkip();
-        }else if(getMedia.duration > swagbot.settings.maxLength * 60){
+        }else if(Media.duration > swagbot.settings.maxLength * 60){
             swagbot.pubVars.skipOnExceed = setTimeout( function(){
                API.sendChat("@"+ API.getDJ().username +" You have now played for as long as this room allows, time to let someone else have the booth!");
              API.moderateForceSkip();
@@ -1214,7 +1203,7 @@ case "uptime":
                     case "silence":
                         if(API.getUser(fromID).permission > 1 || swagbot.admins.indexOf(fromID) > -1){
                             swagbot.settings.interactive = false;
-                            API.sendChat("Yessir!");
+                            API.sendChat("Sleep Mode!");
                         }
                         botMethods.save();
                         break;
@@ -1307,7 +1296,7 @@ case "uptime":
                                     API.sendChat("/me shows @"+crowd[randomUser].username+" the power of friendship. BY SLAPPING THEM WITH A COOKIE");
                                     break;
                                 case 3:
-                                    API.sendChat("/me hands an anthrax laced cookie to @"+crowd[randomUser].username);
+                                    API.sendChat("/me hands a cookie to @"+crowd[randomUser].username);
                                     break;
                             }
                         }else{
@@ -1321,7 +1310,7 @@ case "uptime":
                                     API.sendChat("/me drowns @"+botMethods.cleanString(command[1])+" in batter");
                                     break;
                                 case 2:
-                                    API.sendChat("/me hands an anthrax laced cookie to @"+botMethods.cleanString(command[1]));
+                                    API.sendChat("/me hands a cookie to @"+botMethods.cleanString(command[1]));
                                     break;
                                 case 3:
                                     API.sendChat("/me shows @"+botMethods.cleanString(command[1])+" the power of friendship. BY SLAPPING THEM WITH A COOKIE");
@@ -1604,7 +1593,7 @@ case "uptime":
                     swagbot.misc.ready = false;
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                 }
-        }
+        }/*
         if(swagbot.misc.ready || swagbot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
             if(msg.indexOf("fuck you bot") !== -1 || msg.indexOf("I hate you bot") !== -1 || msg.indexOf("stupid bot") !== -1 || msg.indexOf("bot fuck you") !== -1 || msg.indexOf("f u bot") !== -1 || msg.indexOf("bot f u") !== -1 || msg.indexOf("fuhk yuh bot") !== -1 || msg.indexOf("bot fuhk you") !== -1){
                 var FuckMsg = ["watch what you are saying to me...","Did you're mom teach you to swear like that?"];
@@ -1620,7 +1609,7 @@ case "uptime":
                     swagbot.misc.ready = false;
                     setTimeout(function(){ swagbot.misc.ready = true; }, swagbot.settings.cooldown * 1000);
                 }
-        }
+        }*/
         
     });
 	
